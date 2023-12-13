@@ -1,0 +1,108 @@
+{
+    "cars":
+    [
+        {
+            "id": 1,
+            "body-style": "gigantic monster truck",
+            "make": "Toyota",
+            "model": "Camry",
+            "year": 2023,
+            "engine": {
+                "cylinders": 4,
+                "horsepower": 214
+            },
+            "img": "https://bucket.dealervenom.com/2023/08/2023-Toyota-Camry-TRD-Model-Left.jpg?fm=pjpg&ixlib=php-3.3.1",
+            "price": 22500.00,
+            "createdAt": "2023-12-13 00:00:00:00",
+            "updatedAt": null
+        },
+        {
+            "id": 2,
+            "body-style": "coupe",
+            "make": "Mercedes",
+            "model": "C63 AMG",
+            "year": 2023,
+            "engine": {
+                "cylinders": 8,
+                "horsepower": 520
+            },
+            "img": "https://www.cnet.com/a/img/resize/449f9e27e7949cce20b641d6a869526221a33f09/hub/2018/07/23/052f8057-176e-411b-aa71-a750825c994e/005-2019-mercedes-amg-c63-coupe.jpg?auto=webp&width=1200",
+            "price": 125000.00,
+            "createdAt": "2023-12-13 00:01:15:99",
+            "updatedAt": null
+        },
+        {
+            "id": 3,
+            "body-style": "pickup",
+            "make": "Ford",
+            "model": "F-150",
+            "year": 2016,
+            "engine": {
+                "cylinders": 6,
+                "horsepower": 350
+            },
+            "img": "https://upload.wikimedia.org/wikipedia/commons/f/f0/2018_Ford_F-150_XLT_Crew_Cab%2C_front_11.10.19.jpg",
+            "price": 40000.00,
+            "createdAt": "2023-12-13 00:23:44:56",
+            "updatedAt": null
+        },
+        {
+            "id": 4,
+            "body-style": "wagon/hatchback",
+            "make": "Subaru",
+            "model": "Outback",
+            "year": 2017,
+            "engine": {
+                "cylinders": 4,
+                "horsepower": 254
+            },
+            "img": "https://wildsau.ca/wp-content/uploads/2020/02/front-quarter-2-1.jpg",
+            "price": 29000.00,
+            "createdAt": "2023-12-13 00:11:24:26",
+            "updatedAt": null
+        },
+        {
+            "id": 5,
+            "body-style": "suv",
+            "make": "Chevrolet",
+            "model": "Suburban",
+            "year": 2023,
+            "engine": {
+                "cylinders": 8,
+                "horsepower": 375
+            },
+            "img": "https://cdn.motor1.com/images/mgl/RWqL9/s1/2021-chevrolet-suburban.jpg",
+            "price": 80000.00,
+            "createdAt": "2023-12-13 00:17:44:31",
+            "updatedAt": null
+        }
+    ],
+    "users":
+    [
+        {
+            "id": 1,
+            "username": "agentile01",
+            "first_name": "Angelo",
+            "last_name": "Gentile",
+            "cars": [
+                {
+                    "id": 1,
+                    "body-style": "sedan",
+                    "make": "Toyota",
+                    "model": "Camry",
+                    "year": 2023,
+                    "engine": {
+                        "cylinders": 4,
+                        "horsepower": 214
+                    },
+                    "created_at": "2023-12-13 00:00:00:00",
+                    "updated_at": null
+                }
+            ],
+            "saved_cars": [],
+            "shopping_cart":[],
+            "created_at": "2023-12-13 00:12:00:34",
+            "updated_at": null
+        }
+    ]
+}
