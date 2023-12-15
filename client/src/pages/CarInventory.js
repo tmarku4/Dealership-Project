@@ -1,9 +1,16 @@
-import React from 'react';
-import { useOutletContext } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import CarCard from '../components/CarCard';
+import { useOutletContext } from 'react-router-dom';
 
 function CarInventory(){
-  const {carData} = useOutletContext()
+    const {carData, setCarData} = useOutletContext()
+
+     // fetch car data //
+     useEffect(() => {
+      fetch('http://localhost:3000/cars')
+      .then((resp) => resp.json())
+      .then((data) => setCarData(data))
+    }, [])
 
   return (
     <div>

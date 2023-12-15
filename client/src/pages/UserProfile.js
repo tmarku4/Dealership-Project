@@ -20,17 +20,13 @@ function UserProfile(){
 
     const {profile_img, first_name, last_name, username, cars} = profile
 
-    console.log(profile.cars)
-    console.log(profile)
-    console.log(cars)
-
     return (
         <div>
             <img src={profile_img} alt={`${first_name} ${last_name}`} />
             <p>{username}</p>
             <p>{first_name}</p>
             <p>{last_name}</p>
-            {/* <CarCard carData={profile.cars} /> */}
+            <CarCard carData={profile.cars} />
         </div>
     )
 }
