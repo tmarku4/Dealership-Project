@@ -2,7 +2,7 @@ import React from "react";
 
 function CarCard({ carData }){
      //iterate through state data to populate list
-    const carItems = carData.map((car) => {
+    const carItems = carData?.map((car) => {
         const {make, model, img, id} = car
         return(
             <div key={id} className="car-listing">
