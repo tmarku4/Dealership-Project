@@ -1,8 +1,8 @@
 {
-  "cars": [
+  "vehicles": [
     {
       "id": 1,
-      "body_style": "gigantic monster truck",
+      "body_style": "Sedan",
       "make": "Toyota",
       "model": "Camry",
       "year": 2023,
@@ -17,7 +17,7 @@
     },
     {
       "id": 2,
-      "body_style": "coupe",
+      "body_style": "Coupe",
       "make": "Mercedes",
       "model": "C63 AMG",
       "year": 2023,
@@ -32,7 +32,7 @@
     },
     {
       "id": 3,
-      "body_style": "pickup",
+      "body_style": "Pickup",
       "make": "Ford",
       "model": "F-150",
       "year": 2016,
@@ -47,7 +47,7 @@
     },
     {
       "id": 4,
-      "body_style": "wagon/hatchback",
+      "body_style": "Wagon/Hatchback",
       "make": "Subaru",
       "model": "Outback",
       "year": 2017,
@@ -62,7 +62,7 @@
     },
     {
       "id": 5,
-      "body_style": "suv",
+      "body_style": "Suv",
       "make": "Chevrolet",
       "model": "Suburban",
       "year": 2023,
@@ -74,6 +74,15 @@
       "price": 80000,
       "createdAt": "2023-12-13 00:17:44:31",
       "updatedAt": null
+    },
+    {
+      "year": "2023",
+      "make": "Chevrolet",
+      "model": "Truck",
+      "body_style": "Pickup",
+      "price": "40000.00",
+      "img": "https://www.usatoday.com/gcdn/-mm-/293cbff8433f6d70183c9ba04db594119ce0a42f/c=848-903-2420-1791/local/-/media/2015/02/12/USATODAY/USATODAY/635592971319418457-13-2015-Chevrolet-Silverado-1500-Custom-032.jpg?width=660&height=373&fit=crop&format=pjpg&auto=webp",
+      "id": 6
     }
   ],
   "profiles": [
@@ -132,5 +141,7 @@
       "password": "12345",
       "id": 2
     }
-  ]
+  ],
+  "favorites": [],
+  "shoppingCart": []
 }
