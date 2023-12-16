@@ -3,13 +3,7 @@ import NavBar from "./NavBar";
 import { Outlet, useNavigate } from "react-router-dom";
 
 function Home(){
-    // const [carData, setCarData] = useState([])
-    const [users, setUsers] = useState([])
-    const [carData, setCarData] = useState([])
     const [newModel, setNewModel] = useState({})
-    const [loggedIn, setLoggedIn] = useState(true)
-  
-    const navigate = useNavigate()
 
     function buildNewModel(event){
         const { value, name } = event.target
@@ -31,9 +25,9 @@ function Home(){
             },
             body: JSON.stringify(newModel)
         })
-        .then(response => {
-            if (response.ok) {
-                return response.json().then((returnedData) => {
+        .then(res => {
+            if (res.ok) {
+                return res.json().then((returnedData) => {
                     // allows me to perform data specific navigation/changes with returned data
                     if (successCallback && typeof successCallback === 'function') {
                         successCallback(returnedData);
@@ -51,13 +45,12 @@ function Home(){
 
     return (
         <>
-            <NavBar loggedIn={loggedIn} />
+            <NavBar />
             <Outlet context={
-                {setUsers:setUsers, 
+                { 
                 buildNewModel:buildNewModel, 
-                formPostRoute:formPostRoute,
-                carData:carData,
-                setCarData: setCarData}} />
+                formPostRoute:formPostRoute
+                }} />
         </>
     )
 }

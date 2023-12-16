@@ -7,7 +7,7 @@ function Header (){
     return (
         <>
             <div className="header-container">
-                <h1>Test Header</h1>
+                <h1>Dealership Website</h1>
             </div>
         </>
     )
