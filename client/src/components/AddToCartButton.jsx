@@ -5,6 +5,7 @@ function AddToCartButton ({ carData, carID }) {
 
     const URL = "http://localhost:3000"
 
+    // fetch to see if car is in the cart list 
     useEffect(() => {
         fetch(URL + `/shoppingCart/${carID}`)
         .then(resp => {

@@ -5,11 +5,13 @@ function FavoriteButton({ carData, carID }){
 
     const URL = "http://localhost:3000"
 
+    // fetch to see if car is in the favorites list
     useEffect(() => {
         fetch(URL + `/favorites/${carID}`)
         .then(resp => {
             if (resp.ok) {
                 setIsFavorite(true);
+            // NOTE: will change status code with backend link
             } else if (resp.status === 404 ) {
                 setIsFavorite(false);
             }

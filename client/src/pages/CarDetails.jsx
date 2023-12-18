@@ -4,6 +4,8 @@ import CarCard from "../components/CarCard";
 
 function CarDetails(){
 
+    // build out more car details and info for car-specific page
+
     const [vehicle, setVehicle] = useState([]);
     const { vehicleID } = useParams();
 
