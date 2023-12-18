@@ -6,10 +6,8 @@
       "make": "Toyota",
       "model": "Camry",
       "year": 2023,
-      "engine": {
-        "cylinders": 4,
-        "horsepower": 214
-      },
+      "cylinders": 4,
+      "horsepower": 214,
       "img": "https://bucket.dealervenom.com/2023/08/2023-Toyota-Camry-TRD-Model-Left.jpg?fm=pjpg&ixlib=php-3.3.1",
       "price": 22500,
       "createdAt": "2023-12-13 00:00:00:00",

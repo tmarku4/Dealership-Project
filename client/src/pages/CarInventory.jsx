@@ -5,10 +5,11 @@ function CarInventory(){
     const [carData, setCarData] = useState([])
     const [filteredCars, setFilteredCars] = useState([]);
     const [filters, setFilters] = useState({
-      bodyStyle: '',
+      body_style: '',
       year: '',
       make: '',
       model: '',
+      price: '100000'
     });
 
      // fetch car data //
@@ -23,6 +24,29 @@ function CarInventory(){
         }
       })
     }, [])
+
+    // function for search bar
+
+    function onSearchChange(event){
+      const {name, value} = event.target
+      setFilters({...filters,
+        [name]: value
+      })
+      console.log(value)
+    }
+
+    useEffect(() => {
+      const filteredList = carData.filter(car => {
+        return (
+            (car.body_style.includes(filters.body_style) || !filters.body_style) &&
+            (car.year.toString().includes(filters.year) || !filters.year) &&
+            (car.make.includes(filters.make) || !filters.make) &&
+            (car.model.toLowerCase().includes(filters.model.toLowerCase()) || !filters.model) &&
+            (car.price <= parseInt(filters.price) || !filters.price)
+        );
+      });
+      setFilteredCars(filteredList);
+    }, [filters, carData])
 
     /////// SEARCH BAR ///////
 
@@ -71,12 +95,21 @@ function CarInventory(){
         <h2>Car Listings</h2>
         <div className="search-form">
 
-          <select id="year" value={filters.year}>
+          <select 
+          id="year" 
+          name="year"
+          value={filters.year}
+          onChange={onSearchChange}
+          >
             <option value="">Select Year</option>
             {yearOptions}
           </select>
 
-          <select name="make" value={filters.make}>
+          <select
+          name="make"
+          value={filters.make}
+          onChange={onSearchChange}
+          >
             <option value="">Select Make</option>
             {makeOptions}
           </select>
@@ -86,26 +119,35 @@ function CarInventory(){
             name="model"
             value={filters.model}
             placeholder="Search by Model"
+            onChange={onSearchChange}
           />
 
-          <select id="bodyStyle" value={filters.bodyStyle}>
+          <select
+          id="body_style"
+          name="body_style"
+          value={filters.bodyStyle}
+          onChange={onSearchChange}
+          >
             <option value="">Select Body Style</option>
             {bodyStyleOptions}
           </select>
 
+          {/* range for a slider to determine prices -- add in values to display above slider */}
           <input
             type="range"
             name="price"
             min="0"
-            max="100000"
+            max="200000"
             step="10000"
             value={filters.price}
+            onChange={onSearchChange}
           />
+          <span>{filters.price}</span>
 
         </div>
 
         <div className="car-listings">
-          <CarCard carData={carData}/>
+          <CarCard carData={filteredCars}/>
         </div>
       </div>
     );

@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { useOutletContext, useNavigate } from "react-router-dom";
+import ImageDropzone from "../components/ImageDropzone";
+import "../stylesheets/index.css"
 
 function ListCar(){
+    const [cloudinaryImageURLs, setCloudinaryImageURLs] = React.useState([]);
     const  { buildNewModel, formPostRoute, setCarData } = useOutletContext()
     const navigate = useNavigate()
 
+    function handleImageUpload (uploadedImages){
+        setCloudinaryImageURLs(uploadedImages);
+      };
+
+
     function handleFormSubmit(event){
+        event.preventDefault();
         formPostRoute(event, "vehicles", (returnedData) => {
             setCarData(returnedData)
             navigate(`/inventory`)
@@ -55,12 +64,17 @@ function ListCar(){
             placeholder="List Price..."
             onChange={onFormValueInput}
             />
-            <input
-            type="text"
+            <ImageDropzone 
+            name="img"
+            className='image-dropzone'
+            onImagesUpload={handleImageUpload}
+            />
+            {/* <input
+            type="file"
             name="img"
             placeholder="Upload Image Link..."
             onChange={onFormValueInput}
-            />
+            /> */}
             <button 
             type="submit"
             >List</button>
