@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CarCard from "../components/CarCard";
+import HeroSlider from "../components/HeroSlider"
 
 function LandingPage (){
     const [newestCars, setNewestCars] = useState([])
@@ -25,7 +26,14 @@ function LandingPage (){
 
     return (
         <>
-          <CarCard carData={topTwoCars} />  
+          <HeroSlider />
+          <div className="home-content">
+            <div className="hero-section">
+                <h1>Your Dream Car Awaits</h1>
+                <p>Explore the latest models and find the perfect match for you.</p>
+            </div>
+          </div>
+          {/* <CarCard carData={topTwoCars} />   */}
         </>
     )
 }
