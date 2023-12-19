@@ -15,7 +15,7 @@ function ShoppingCart () {
                     })
                 }
             })
-    }, [])
+    }, [currentCart])
 
     return (
         <CarCard carData={currentCart} />

@@ -161,14 +161,6 @@
       "updated_at": null
     }
   ],
-  "favorites": [
-    {
-      "id": 1
-    }
-  ],
-  "shoppingCart": [
-    {
-      "id": 1
-    }
-  ]
+  "favorites": [],
+  "shoppingCart": []
 }

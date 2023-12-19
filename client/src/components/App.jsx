@@ -1,6 +1,5 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import {Cloudinary} from "@cloudinary/url-gen";
 
 // components for site
 import Header from "./Header";
@@ -11,7 +10,6 @@ import routes from "../routes";
 function App() {
 
   const router = createBrowserRouter(routes)
-  const cld = new Cloudinary({cloud: {cloudName: 'dq0gpy4yy'}});
 
   return (
     <div>

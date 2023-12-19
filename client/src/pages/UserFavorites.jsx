@@ -15,7 +15,7 @@ function UserFavorites(){
                     })
                 }
             })
-    }, [])
+    }, [currentFavorites])
 
     return (
         <CarCard carData={currentFavorites} />
