@@ -2,62 +2,85 @@ import React, { useState } from "react";
 import { useOutletContext, useNavigate, Link } from "react-router-dom";
 
 function SignUpPage(){
-    const [users, setUsers] = useState([])
-    const  { buildNewModel, formPostRoute } = useOutletContext()
     const navigate = useNavigate()
-
+  
     function handleFormSubmit(event){
-        formPostRoute(event, "profiles", (returnedData) => {
-            setUsers(returnedData)
-            navigate(`/profile/2`)
-        })
-    }
+        event.preventDefault();
 
-    function onFormValueInput(event){
-        buildNewModel(event)
+        const newUser = new FormData(event.target)
+        const JSONData = {}
+
+        // it does not JSONIFY properly as FormData....
+        // make it a standard object
+        newUser.forEach((value, key) => {
+            JSONData[key] = value
+        })
+
+        console.log(JSONData)
+        fetch(`http://localhost:3000/profiles`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+        },
+        body: JSON.stringify(JSONData)
+        })
+        .then((res) => {
+            if (res.ok) {
+            return res.json().then((returnedData) => {
+                navigate(`/profile/${returnedData.id}`)
+            });
+            } else {
+            // Handle error
+            console.error("Error:", res.status, res.statusText);
+            }
+        })
+        .catch((error) => {
+            console.log(`${error}`);
+        });
     }
 
     return (
         <>
             <form
-            className="user-form"
+            id="user-form"
             onSubmit={handleFormSubmit}
             >
                 <input
                 type="text"
                 name="first_name"
                 placeholder="First Name..."
-                onChange={onFormValueInput}
+                // onChange={onFormValueInput}
                 />
                 <input
                 type="text"
                 name="last_name"
                 placeholder="Last Name..."
-                onChange={onFormValueInput}
+                // onChange={onFormValueInput}
                 />
                 <input
                 type="text"
                 name="city"
                 placeholder="City..."
-                onChange={onFormValueInput}
+                // onChange={onFormValueInput}
                 />
                 <input
                 type="text"
                 name="state"
                 placeholder="State..."
-                onChange={onFormValueInput}
+                // onChange={onFormValueInput}
                 />
                 <input
                 type="text"
                 name="username"
                 placeholder="Username..."
-                onChange={onFormValueInput}
+                // onChange={onFormValueInput}
                 />
                 <input
                 type="text"
                 name="password"
                 placeholder="Password..."
-                onChange={onFormValueInput}
+                // onChange={onFormValueInput}
                 />
                 <button 
                 type="submit"

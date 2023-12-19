@@ -1,61 +1,35 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
-function ImageDropzone() {
-    const [images, setImages] = useState([])
+function ImageDropzone({ images, setImages }) {
     const [errorFiles, setErrorFiles] = useState([])
-    const [filesToUpload, setFilesToUpload] = useState([])
 
-    const handleImageUpload = async () => {
-      const uploadPromises = filesToUpload.map(async (file) => {
-        const formData = new FormData();
-          formData.append("file", file);
-          formData.append("upload_preset", "q3d5u7hz");
-      
-          try {
-            const response = await fetch(
-              "https://api.cloudinary.com/v1_1/dq0gpy4yy",
-              {
-                method: "POST",
-                body: formData,
-              }
-            );
-      
-            const data = await response.json();
-            return { ...file, preview: data.secure_url };
-          } catch (error) {
-            console.error("Error uploading image: ", error);
-            return null;
-          }
-      });
-      Promise.all(uploadPromises).then((uploadedImages) => {
-        // Filter out null values (failed uploads) and update state with successful uploads
-        const successfulUploads = uploadedImages.filter((image) => image !== null);
-        setImages((prevImages) => [...prevImages, ...successfulUploads]);
-      });
-    };
-      
-
+    // used as a callback the ondrop is for when files are uploaded
     const onDrop = useCallback(
       async (acceptedFiles, rejectedFiles) => {
         const remainingSlots = 5 - images.length;
-        const filesToAdd = acceptedFiles.slice(0, remainingSlots);
-  
-        handleImageUpload(filesToAdd);
+        const imagesToAdd = acceptedFiles.slice(0, remainingSlots);
 
-      setErrorFiles(rejectedFiles);
+        setImages(prevImages => [
+          ...prevImages, 
+          ...imagesToAdd.map((image) => {
+           return Object.assign(image, {preview: URL.createObjectURL(image) })
+          })
+        ]);
+        setErrorFiles(rejectedFiles);
       },
-      [images, handleImageUpload]
+      [images]
     );
 
+    // methods to remove the items when clicking the remove button per file
     const removeImage = (name) => {
       setImages((prevImages) => prevImages.filter(img => img.name !== name))
     }
-
     const removeError = (name) => {
       setErrorFiles((prevErrorFiles) => prevErrorFiles.filter(file => file.file.name !== name))
     }
 
+    // what to display when the images are correctly added
     const addedImages = images.map((img, index) => {
       return (
           <div key={index}>
@@ -71,6 +45,7 @@ function ImageDropzone() {
       )
     })
 
+    // what to display for files that don't meet the criteria
     const erroredFiles = errorFiles.map(({file, errors}) => {
       return (
         <div key={file.name}>
@@ -87,8 +62,7 @@ function ImageDropzone() {
       )
     })
 
-    console.log(images)
-
+    // parameters for what to accept as files in dropzone
     const {getRootProps, getInputProps, isDragActive} = useDropzone({ 
       onDrop, 
       accept:{
@@ -99,35 +73,79 @@ function ImageDropzone() {
       maxFiles: 5
     })
 
-    return (
-      <>
-        <div {...getRootProps()} style={{border: "1pt dashed black"}}>
-          <input {...getInputProps()} />
-          {isDragActive ? (
+    console.log(images)
+
+    // NOTE: function for uploading to cloudinary
+    // function uploadCloudinary(){
+    //   if (!images.length) {
+    //     return
+    //   }
+
+    //   const formData = new FormData()
+    //   images.forEach((image) => formData.append('file', image))
+    //   // cloudinary specific upload preset (built in Cloudinary)
+    //   formData.append('upload_preset', 'Redline_Dealership')
+  
+      
+    // }
+
+    // const URL = process.env.REACT_APP_NEXT_PUBLIC_CLOUDINARY_URL
+    // console.log(URL)
+
+    if (images.length < 5) {
+      return (
+        <>
+          <div {...getRootProps()} style={{border: "1pt dashed black"}}>
+            <input {...getInputProps()} />
+            {isDragActive ? (
+              <>
+                <p>Drop Images Here</p>
+                <p>(Total of 5 Images)</p>
+              </>
+            ) : (
             <>
-              <p>Drop Images Here</p>
+              <p>Click Here or Drag Images to Upload</p>
               <p>(Total of 5 Images)</p>
             </>
-          ) : (
-          <>
-            <p>Click Here or Drag Images to Upload</p>
-            <p>(Total of 5 Images)</p>
-          </>
-          )}
-        </div>
-        <div>
-          <h4>Images</h4>
-          {addedImages}
-        </div>
-        <div>
-          {(errorFiles.length > 0) ? (
-            <h4>Errors</h4>
-          ) : (<></>)
-          }
-          {erroredFiles}
-        </div>
-      </>
-    )
+            )}
+          </div>
+          <div>
+          {(addedImages.length > 0) ? (
+              <h4>Images to Upload</h4>
+            ) : (<></>)
+            }
+            {addedImages}
+          </div>
+          <div>
+            {(errorFiles.length > 0) ? (
+              <h4>Incompatible Images</h4>
+            ) : (<></>)
+            }
+            {erroredFiles}
+          </div>
+        </>
+      )
+    } else {
+      return (
+        <>
+          <div>
+            {(addedImages.length > 0) ? (
+              <h4>Images</h4>
+            ) : (<></>)
+            }
+            {addedImages}
+          </div>
+          <div>
+            {(errorFiles.length > 0) ? (
+              <h4>Errors</h4>
+            ) : (<></>)
+            }
+            {erroredFiles}
+          </div>
+        </>
+      )
+    }
+    
 }
 
 export default ImageDropzone

@@ -9,7 +9,7 @@ function CarInventory(){
       year: '',
       make: '',
       model: '',
-      price: '100000'
+      price: '150000'
     });
 
      // fetch car data //
@@ -37,13 +37,22 @@ function CarInventory(){
 
     useEffect(() => {
       const filteredList = carData.filter(car => {
-        return (
+        if (filters.price === "150000"){
+          return (
+            (car.body_style.includes(filters.body_style) || !filters.body_style) &&
+            (car.year.toString().includes(filters.year) || !filters.year) &&
+            (car.make.includes(filters.make) || !filters.make) &&
+            (car.model.toLowerCase().includes(filters.model.toLowerCase()) || !filters.model)
+        );
+        } else {
+          return (
             (car.body_style.includes(filters.body_style) || !filters.body_style) &&
             (car.year.toString().includes(filters.year) || !filters.year) &&
             (car.make.includes(filters.make) || !filters.make) &&
             (car.model.toLowerCase().includes(filters.model.toLowerCase()) || !filters.model) &&
             (car.price <= parseInt(filters.price) || !filters.price)
-        );
+          );
+        }
       });
       setFilteredCars(filteredList);
     }, [filters, carData])
@@ -137,12 +146,12 @@ function CarInventory(){
             type="range"
             name="price"
             min="0"
-            max="200000"
-            step="10000"
+            max="150000"
+            step="5000"
             value={filters.price}
             onChange={onSearchChange}
           />
-          <span>{filters.price}</span>
+          <span>{(filters.price === "150000" ? "All Available" : 'Max Price: $' + filters.price)}</span>
 
         </div>
 

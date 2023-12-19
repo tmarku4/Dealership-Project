@@ -29,7 +29,8 @@ function NavBar() {
                     <Link to="/profile/:userID" className="navigation-button">Profile</Link>
                     <Link to="/myfavorites" className="navigation-buttono">Saved for Later</Link>
                     <Link to="/shoppingcart" className="navigation-button">My Cart</Link>
-                    <button>Sign Out</button>
+                    <Link to="/login" className="navigation-button">Login</Link>
+                    {/* <button>Sign Out</button> */}
                 </div>
             </>
         )

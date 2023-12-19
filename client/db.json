@@ -24,7 +24,7 @@
         "horsepower": 520
       },
       "img": "https://www.cnet.com/a/img/resize/449f9e27e7949cce20b641d6a869526221a33f09/hub/2018/07/23/052f8057-176e-411b-aa71-a750825c994e/005-2019-mercedes-amg-c63-coupe.jpg?auto=webp&width=1200",
-      "price": 125000,
+      "price": 250000,
       "createdAt": "2023-12-13 00:01:15:99",
       "updatedAt": null
     },
@@ -81,6 +81,36 @@
       "price": "40000.00",
       "img": "https://www.usatoday.com/gcdn/-mm-/293cbff8433f6d70183c9ba04db594119ce0a42f/c=848-903-2420-1791/local/-/media/2015/02/12/USATODAY/USATODAY/635592971319418457-13-2015-Chevrolet-Silverado-1500-Custom-032.jpg?width=660&height=373&fit=crop&format=pjpg&auto=webp",
       "id": 6
+    },
+    {
+      "year": "2023",
+      "make": "Truck",
+      "model": "Truck",
+      "body_style": "pickup",
+      "price": "50000",
+      "images": [
+        {
+          "path": "—Pngtree—notch board signs_3138457.png",
+          "preview": "blob:http://localhost:3001/54aed9ca-f230-4a11-ba66-6bc1238c7515"
+        },
+        {
+          "path": "4.png",
+          "preview": "blob:http://localhost:3001/559023fc-c364-4b39-8eb3-64d4ab5a2acc"
+        },
+        {
+          "path": "3113939-middle.png",
+          "preview": "blob:http://localhost:3001/d0410bf1-0f60-4917-8990-2f9c5c84f4dd"
+        },
+        {
+          "path": "bullet.png",
+          "preview": "blob:http://localhost:3001/eb8fe5a1-ce8b-4c37-b5f3-5f20cda1f8d8"
+        },
+        {
+          "path": "diamond.png",
+          "preview": "blob:http://localhost:3001/19e09df5-5d8b-46b6-9753-17bf4eab7a39"
+        }
+      ],
+      "id": 7
     }
   ],
   "profiles": [
@@ -129,15 +159,6 @@
       "shopping_cart": [],
       "created_at": "2023-12-13 00:12:00:34",
       "updated_at": null
-    },
-    {
-      "first_name": "Steve",
-      "last_name": "Buscemi",
-      "city": "New York",
-      "state": "NY",
-      "username": "stevieboy01",
-      "password": "12345",
-      "id": 2
     }
   ],
   "favorites": [],
