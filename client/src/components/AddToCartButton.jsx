@@ -18,7 +18,7 @@ function AddToCartButton ({ carData, carID }) {
             .catch((error) => {
                 console.error('Error fetching favorite data.', error)
             })
-        }, [])
+        }, [inCart])
     
 
     function addToCart(event) {
@@ -78,7 +78,7 @@ function AddToCartButton ({ carData, carID }) {
 
     return (
         <button 
-        className='favorite-button'
+        className='shopping-button'
         onClick={onAddCartButtonClick}
         >
             {inCart ? 'Remove from Cart': 'Add to Cart'}
