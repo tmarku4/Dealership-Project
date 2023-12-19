@@ -140,6 +140,14 @@
       "id": 2
     }
   ],
-  "favorites": [],
-  "shoppingCart": []
+  "favorites": [
+    {
+      "id": 1
+    }
+  ],
+  "shoppingCart": [
+    {
+      "id": 1
+    }
+  ]
 }
