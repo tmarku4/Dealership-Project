@@ -4,77 +4,124 @@ import ImageDropzone from "../components/ImageDropzone";
 import "../stylesheets/index.css"
 
 function ListCar(){
-    const [cloudinaryImageURLs, setCloudinaryImageURLs] = React.useState([]);
-    const  { buildNewModel, formPostRoute, setCarData } = useOutletContext()
+    const [ images, setImages ] = useState([])
+    const { carData, setCarData } = useOutletContext()
     const navigate = useNavigate()
-
-    function handleImageUpload (uploadedImages){
-        setCloudinaryImageURLs(uploadedImages);
-      };
-
 
     function handleFormSubmit(event){
         event.preventDefault();
-        formPostRoute(event, "vehicles", (returnedData) => {
-            setCarData(returnedData)
-            navigate(`/inventory`)
-        })
-    }
+        
+        const newCarListing = new FormData(event.target)
+        const JSONData = {}
 
-    function onFormValueInput(event){
-        buildNewModel(event)
+        newCarListing.forEach((value, key) => {
+            JSONData[key] = value
+        })
+        JSONData['images'] = images
+
+        fetch(`http://localhost:3000/vehicles`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+        },
+        body: JSON.stringify(JSONData)
+        })
+        .then((res) => {
+            if (res.ok) {
+            return res.json().then((returnedData) => {
+                setCarData({
+                    ...carData,
+                    returnedData
+                })
+                navigate(`/vehicle/${returnedData.id}`)
+            });
+            } else {
+            // Handle error
+            console.error("Error:", res.status, res.statusText);
+            }
+        })
+        .catch((error) => {
+            console.log(`${error}`);
+        });
+
     }
 
     return (
         <form
-        className="user-form"
         onSubmit={handleFormSubmit}
+        id="sell-car-form"
         >
             <input
             type="text"
             name="year"
             placeholder="Year..."
-            onChange={onFormValueInput}
+            // onChange={onFormValueInput}
             />
             <input
             type="text"
             name="make"
             placeholder="Brand..."
-            onChange={onFormValueInput}
+            // onChange={onFormValueInput}
             />
             <input
             type="text"
             name="model"
             placeholder="Model..."
-            onChange={onFormValueInput}
+            // onChange={onFormValueInput}
             />
-            <select 
-            name="body_style"
-            onChange={onFormValueInput}
-            >
+            <select name="body_style">
                 <option value="coupe">Coupe</option>
                 <option value="sedan">Sedan</option>
                 <option value="wagon/hatchback">Wagon/Hatchback</option>
                 <option value="suv">SUV</option>
                 <option value="pickup">Pickup</option>
             </select>
+            <select name="color">
+                <option value="black">Black</option>
+                <option value="silver">Silver</option>
+                <option value="white">White</option>
+                <option value="red">Red</option>
+                <option value="orange">Orange</option>
+                <option value="yellow">Yellow</option>
+                <option value="green">Green</option>
+                <option value="blue">Blue</option>
+                <option value="purple">Purple</option>
+                <option value="pink">Pink</option>
+            </select>
             <input
             type="float"
             name="price"
             placeholder="List Price..."
-            onChange={onFormValueInput}
+            // onChange={onFormValueInput}
             />
             <ImageDropzone 
             name="img"
             className='image-dropzone'
-            onImagesUpload={handleImageUpload}
+            images={images}
+            setImages={setImages}
             />
-            {/* <input
-            type="file"
-            name="img"
-            placeholder="Upload Image Link..."
-            onChange={onFormValueInput}
-            /> */}
+            <input
+            type="float"
+            name="total_miles"
+            placeholder="Current Mileage..."
+            // onChange={onFormValueInput}
+            />
+            <span>
+                {' Engine Details: '}
+            </span>
+            <input
+            type="integer"
+            name="engine_horsepower"
+            placeholder="Horsepower..."
+            // onChange={onFormValueInput}
+            />
+            <input
+            type="integer"
+            name="engine_torque"
+            placeholder="Torque..."
+            // onChange={onFormValueInput}
+            />
             <button 
             type="submit"
             >List</button>
