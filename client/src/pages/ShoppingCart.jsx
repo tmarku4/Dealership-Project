@@ -3,22 +3,30 @@ import CarCard from "../components/CarCard";
 
 function ShoppingCart () {
     const [currentCart, setCurrentCart] = useState([])
+    const [fetchTrigger, setFetchTrigger] = useState(true)
 
-    const URL = "http://localhost:3000"
+    function updateCart(){
 
-    useEffect(() => {
-        fetch(URL + '/shoppingCart')
+        fetch('/shoppingcarts')
             .then(res => {
                 if (res.ok) {
                     res.json().then(returnedData => {
-                        setCurrentCart(returnedData)
+                        setCurrentCart(returnedData.map((car) => car.car_obj))
+                        // console.log(carsInCart)
                     })
                 }
             })
-    }, [currentCart])
+    }
+
+    useEffect(() => {
+        updateCart()
+    }, [])
+
+    // setFetchTrigger(currentCart)
 
     return (
-        <CarCard carData={currentCart} />
+        <CarCard carData={currentCart} updateCart={updateCart}/>
+        // <CarCard carData={currentCart} />
     )
 }
 

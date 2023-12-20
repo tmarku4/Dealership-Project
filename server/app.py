@@ -50,19 +50,23 @@ def get_newest_cars():
 def create_car():
     data = request.json
     try:
-        new_car = Car(
-            year = data.get("year"),
-            make = data.get("make"),
-            model = data.get("model"),
-            body_style = data.get("body_style"),
-            body_color = data.get("body_color"),
-            total_miles = data.get("total_miles"),
-            engine_horse_power = data.get("engine_horse_power"),
-            engine_torque = data.get("engine_torque"),
-            price = data.get("price"),
-            owner_id = data.get("owner_id")
+        new_car = Car()
+        for key in data:
+            setattr(Car, key, data[key])
+
+        # new_car = Car(
+        #     year = data.get("year"),
+        #     make = data.get("make"),
+        #     model = data.get("model"),
+        #     body_style = data.get("body_style"),
+        #     body_color = data.get("body_color"),
+        #     total_miles = data.get("total_miles"),
+        #     engine_horse_power = data.get("engine_horse_power"),
+        #     engine_torque = data.get("engine_torque"),
+        #     price = data.get("price"),
+        #     owner_id = data.get("owner_id")
             
-        )
+        # )
         db.session.add(new_car)
         db.session.commit()
 
@@ -184,7 +188,7 @@ def get_favoritecar_by_id(id):
     if found_favoritecar:
         return found_favoritecar.to_dict(), 200
     else:
-        return{ "message": "Not Found"}, 404
+        return{ "message": "Not Found"}, 218
     
 
 
@@ -248,7 +252,7 @@ def get_shoppingcart_by_id(id):
     if found_shoppingcart:
         return found_shoppingcart.to_dict(), 200
     else:
-        return{ "message": "Not Found"}, 404
+        return{ "message": "Not Found"}, 218
     
 @app.post("/shoppingcarts")
 def create_shoppingcart():
@@ -315,6 +319,16 @@ def get_forsale_by_id(id):
         return found_forsale.to_dict(), 200
     else:
         return{ "message": "Not Found"}, 404
+    
+@app.get("/forsale/newest")
+def get_newest_forsale():
+    newest_cars = Car.query.order_by(desc(Car.created_at)).limit(10).all()
+
+    if newest_cars:
+        cars_list = [car.to_dict() for car in newest_cars]
+        return {"newest_cars": cars_list}, 200
+    else:
+        return {"message": "Not Found"}, 404
     
 
 @app.post("/forsale")

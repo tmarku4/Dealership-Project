@@ -8,7 +8,7 @@ function UserProfile(){
 
   // Fetch profile data for user //
     useEffect(() => {
-        fetch(`http://localhost:3000/profiles/${profileID}`)
+        fetch(`/users/${profileID}`)
         .then((response) => response.json())
         .then((returnedData) => {
             setProfile(returnedData);
