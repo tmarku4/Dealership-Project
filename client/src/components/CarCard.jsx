@@ -5,7 +5,8 @@ import AddToCartButton from "./AddToCartButton";
 import CarDetailsButton from "./CarDetailsButton";
 import { useOutletContext } from "react-router-dom";
 
-function CarCard({ carData, handleRemoveClick, updateCart, setFavFetchTrigger}){
+function CarCard({ carData, updateCart, updateFavorites}){
+
     // iterate through prop data to populate list
     const carItems = carData?.map((car) => {
         const {make, model, year, img, id} = car
@@ -14,23 +15,13 @@ function CarCard({ carData, handleRemoveClick, updateCart, setFavFetchTrigger}){
                 <img src={img} alt={`${make} ${model}`} />
                 <p>{`${year} ${make} ${model}`}</p>
                 <FavoriteButton 
-                carData={carData} 
                 carID={id}
-                setFavFetchTrigger={setFavFetchTrigger}
+                updateFavorites={updateFavorites}
                 />
                 <AddToCartButton 
                 carID={id} 
-                handleRemoveClick={handleRemoveClick}
                 updateCart={updateCart}
                 />
-                {/* <FavoriteButton 
-                carData={carData} 
-                carID={id}
-                />
-                <AddToCartButton 
-                carID={id} 
-                handleRemoveClick={handleRemoveClick}
-                /> */}
                 <CarDetailsButton />
             </div>
         )

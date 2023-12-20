@@ -74,24 +74,7 @@ function ImageDropzone({ images, setImages }) {
     })
 
     console.log(images)
-
-    // NOTE: function for uploading to cloudinary
-    // function uploadCloudinary(){
-    //   if (!images.length) {
-    //     return
-    //   }
-
-    //   const formData = new FormData()
-    //   images.forEach((image) => formData.append('file', image))
-    //   // cloudinary specific upload preset (built in Cloudinary)
-    //   formData.append('upload_preset', 'Redline_Dealership')
-  
-      
-    // }
-
-    // const URL = process.env.REACT_APP_NEXT_PUBLIC_CLOUDINARY_URL
-    // console.log(URL)
-
+    
     if (images.length < 5) {
       return (
         <>

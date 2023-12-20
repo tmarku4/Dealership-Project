@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 
-# Standard library imports
+# Cloudinary imports
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 # Remote library imports
-from flask import request, make_response, jsonify, session
+from flask import request, make_response, jsonify, session, render_template
 from flask_restful import Resource
 from sqlalchemy import desc
 from flask_bcrypt import Bcrypt
@@ -12,8 +15,6 @@ from flask_bcrypt import Bcrypt
 from config import app, db, api
 from models import Car, User, FavoriteCar, ShoppingCart, ForSale, CarImage
 
- 
-
 app.secret_key = '57d79466ee3cf8a8ba325cf06fdc59b6'
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -21,16 +22,11 @@ app.secret_key = '57d79466ee3cf8a8ba325cf06fdc59b6'
 
 bcrypt = Bcrypt(app)
 URL_PREFIX = '/api'
-# db.init_app(app)
- 
 # Views go here!
 
 @app.route('/')
 def index():
     return '<h1>Project Server</h1>'
-
-
-
 
 # CARS
 @app.get('/cars')
@@ -59,14 +55,26 @@ def get_newest_cars():
     
 @app.post("/cars")
 def create_car():
-    data = request.json
     try:
-        # new_car = Car()
-        # for key in data:
-        #     setattr(Car, key, data[key])
+        data = request.json
+        uploaded_urls = []
+    
+        for pic in range(1,6):
+            file_key = f"file{pic}"
+            if file_key in request.files:
+                file_to_upload = request.files[file_key]
+
+                cloudinary.config(
+                    cloud_name= 'dq0gpy4yy',
+                    api_keys='327993971821764',
+                    api_secret='OrsYVPet6aSUHh-XxRcar6hldMY'
+                )
+                upload_result = cloudinary.uploader.upload(file_to_upload)
+                uploaded_url = upload_result['secure_url']
+
+                uploaded_urls.append[uploaded_url]
 
         new_car = Car(
-            year = data.get("year"),
             make = data.get("make"),
             model = data.get("model"),
             body_style = data.get("body_style"),
@@ -76,12 +84,16 @@ def create_car():
             engine_torque = data.get("engine_torque"),
             price = data.get("price"),
             owner_id = data.get("owner_id")
-            
         )
+
+        for url in uploaded_urls:
+            new_car_image = CarImage(image=url, car=new_car)
+            db.session.add(new_car_image)
+
         db.session.add(new_car)
         db.session.commit()
 
-        return new_car.to_dict(), 201
+        return {"car": new_car.to_dict(), "image_urls": uploaded_urls}, 201
     
     except Exception as e:
         return {"error": f"{e}"}, 404
