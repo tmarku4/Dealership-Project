@@ -13,7 +13,7 @@ function CarInventory(){
     });
 
      // fetch car data //
-     useEffect(() => {
+    useEffect(() => {
       fetch('/cars')
       .then((resp) => {
         if (resp.ok){
