@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import CarCard from "../components/CarCard";
+import { useOutletContext } from "react-router-dom";
 
 function ShoppingCart () {
     const [currentCart, setCurrentCart] = useState([])

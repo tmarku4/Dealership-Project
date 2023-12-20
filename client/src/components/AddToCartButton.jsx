@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useOutletContext } from "react-router-dom";
 
 function AddToCartButton ({ carID, updateCart }) {
     const [inCart, setInCart] = useState(false)
     const [currentCart, setCurrentCart] = useState([])
+    const [ currentUser ] = useOutletContext()
+    console.log(currentUser)
 
     // fetch to see if car is in the cart list 
     // change route to select the id associated with the users cars in his shopping cart?
@@ -46,6 +49,7 @@ function AddToCartButton ({ carID, updateCart }) {
                 "Accept": "application/json"
             },
             body: JSON.stringify({
+                // set to currentUser.id when working
                 user_id: 1,
                 car_id: carIDClicked
             })

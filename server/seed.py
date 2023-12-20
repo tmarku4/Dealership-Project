@@ -5,7 +5,7 @@ from random import randint, choice
 
 # Remote library imports
 from faker import Faker
-
+from flask_bcrypt import Bcrypt
 # Local imports
 from app import app
 from models import db, Car, User, FavoriteCar, ShoppingCart, ForSale, CarImage
@@ -13,6 +13,7 @@ from models import db, Car, User, FavoriteCar, ShoppingCart, ForSale, CarImage
 if __name__ == "__main__":
     fake = Faker()
     with app.app_context():
+        bcrypt = Bcrypt(app)
 
         print("Starting seed...")
 
@@ -75,7 +76,8 @@ if __name__ == "__main__":
         users_list = []
 
         for _ in range(0, 5):
-            u = User(first_name=fake.first_name(), last_name=fake.last_name(), city=fake.company(), state=choice(state_list).capitalize(), username=fake.company(), password=fake.company())
+            password_hash=bcrypt.generate_password_hash("123").decode('utf-8')
+            u = User(first_name=fake.first_name(), last_name=fake.last_name(), city=fake.company(), state=choice(state_list).capitalize(), username=fake.company(), password=password_hash)
 
             users_list.append(u)
 
