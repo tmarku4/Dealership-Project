@@ -4,7 +4,7 @@ import { useOutletContext } from "react-router-dom";
 function AddToCartButton ({ carID, updateCart }) {
     const [inCart, setInCart] = useState(false)
     const [currentCart, setCurrentCart] = useState([])
-    const [ currentUser ] = useOutletContext()
+    const { currentUser } = useOutletContext()
     console.log(currentUser)
 
     // fetch to see if car is in the cart list 

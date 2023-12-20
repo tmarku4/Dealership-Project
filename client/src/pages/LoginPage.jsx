@@ -3,12 +3,11 @@ import { useState } from 'react'
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
 
 function LoginPage(){
-    console.log('test')
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
-    const [attemptLogin, logout] = useOutletContext()
+    const {attemptLogin, logout} = useOutletContext()
 
     const navigate = useNavigate()
 
@@ -20,8 +19,6 @@ function LoginPage(){
         attemptLogin({username, password})
         navigate('/')
     }
-
-
 
     return (
         <>
