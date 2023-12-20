@@ -9,11 +9,9 @@ function CarDetails(){
     const [vehicle, setVehicle] = useState([]);
     const { vehicleID } = useParams();
 
-    const URL = "http://localhost:3000"
-
     // Fetch vehicle data //
     useEffect(() => {
-        fetch(URL + `/vehicles/${vehicleID}`)
+        fetch(`/cars/${vehicleID}`)
         .then((res) => {
             if (res.ok) {
                 res.json().then((returnedData) => {
