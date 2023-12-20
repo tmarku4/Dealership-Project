@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useOutletContext, useParams } from "react-router-dom";
 import CarCard from "../components/CarCard";
 
 function UserProfile(){
     const [profile, setProfile] = useState({});
     const { profileID } = useParams();
 
+    const [currentUser] = useOutletContext()
+
   // Fetch profile data for user //
     useEffect(() => {
-        fetch(`/users/${profileID}`)
+        fetch(`/users/${currentUser.id}`)
         .then((response) => response.json())
         .then((returnedData) => {
             setProfile(returnedData);
