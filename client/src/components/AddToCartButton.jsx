@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useOutletContext } from "react-router-dom";
 
 function AddToCartButton ({ carID, updateCart }) {
     const [inCart, setInCart] = useState(false)
+    const [ currentUser ] = useOutletContext()
+    console.log(currentUser)
 
     // fetch to see if car is in the cart list 
     useEffect(() => {
@@ -29,6 +32,7 @@ function AddToCartButton ({ carID, updateCart }) {
                 "Accept": "application/json"
             },
             body: JSON.stringify({
+                // set to currentUser.id when working
                 user_id: 1,
                 car_id: carIDClicked
             })

@@ -19,6 +19,8 @@ class User(db.Model, SerializerMixin):
     password = db.Column(db.String, nullable=False)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
+
+    password_hash = db.Column(db.String)
     
     # car to user 
     owned_cars = db.relationship("Car", back_populates="user_obj", cascade="all, delete-orphan")

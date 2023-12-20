@@ -14,10 +14,14 @@ from models import Car, User, FavoriteCar, ShoppingCart, ForSale, CarImage
 
  
 
+app.secret_key = '57d79466ee3cf8a8ba325cf06fdc59b6'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# app.json.compact = False
+
 bcrypt = Bcrypt(app)
 URL_PREFIX = '/api'
-
-app.secret_key = '57d79466ee3cf8a8ba325cf06fdc59b6'
+# db.init_app(app)
  
 # Views go here!
 
@@ -57,23 +61,23 @@ def get_newest_cars():
 def create_car():
     data = request.json
     try:
-        new_car = Car()
-        for key in data:
-            setattr(Car, key, data[key])
+        # new_car = Car()
+        # for key in data:
+        #     setattr(Car, key, data[key])
 
-        # new_car = Car(
-        #     year = data.get("year"),
-        #     make = data.get("make"),
-        #     model = data.get("model"),
-        #     body_style = data.get("body_style"),
-        #     body_color = data.get("body_color"),
-        #     total_miles = data.get("total_miles"),
-        #     engine_horse_power = data.get("engine_horse_power"),
-        #     engine_torque = data.get("engine_torque"),
-        #     price = data.get("price"),
-        #     owner_id = data.get("owner_id")
+        new_car = Car(
+            year = data.get("year"),
+            make = data.get("make"),
+            model = data.get("model"),
+            body_style = data.get("body_style"),
+            body_color = data.get("body_color"),
+            total_miles = data.get("total_miles"),
+            engine_horse_power = data.get("engine_horse_power"),
+            engine_torque = data.get("engine_torque"),
+            price = data.get("price"),
+            owner_id = data.get("owner_id")
             
-        # )
+        )
         db.session.add(new_car)
         db.session.commit()
 
@@ -108,73 +112,71 @@ def delete_car(id):
         return{ "message": "Not Found"}, 404
     
 
-
-
 # USERS
     
 
-@app.get('/users')
-def get_all_users():
-    users = User.query.all()
-    users_to_dict = [ u.to_dict() for u in users ]
-    return users_to_dict, 200
+# @app.get('/users')
+# def get_all_users():
+#     users = User.query.all()
+#     users_to_dict = [ u.to_dict() for u in users ]
+#     return users_to_dict, 200
 
 
-@app.get('/users/<int:id>')
-def get_user_by_id(id):
-    found_user = User.query.filter(User.id == id).first ()
-    if found_user:
-        return found_user.to_dict(), 200
-    else:
-        return{ "message": "Not Found"}, 404
+# @app.get('/users/<int:id>')
+# def get_user_by_id(id):
+#     found_user = User.query.filter(User.id == id).first ()
+#     if found_user:
+#         return found_user.to_dict(), 200
+#     else:
+#         return{ "message": "Not Found"}, 404
     
 
-@app.post("/users")
-def create_user():
-    data = request.json
-    try:
-        new_user = User(
-            first_name = data.get("first_name"),
-            last_name = data.get("last_name"),
-            city = data.get("city"),
-            state = data.get("state"),
-            username=data.get("username"),
-            password=data.get("password")
-        )
-        db.session.add(new_user)
-        db.session.commit()
+# @app.post("/users")
+# def create_user():
+#     data = request.json
+#     try:
+#         new_user = User(
+#             first_name = data.get("first_name"),
+#             last_name = data.get("last_name"),
+#             city = data.get("city"),
+#             state = data.get("state"),
+#             username=data.get("username"),
+#             password=data.get("password")
+#         )
+#         db.session.add(new_user)
+#         db.session.commit()
 
-        return new_user.to_dict(), 201
+#         return new_user.to_dict(), 201
     
-    except Exception as e:
-        return {"error": f"{e}"}, 404
-    
-
-@app.patch("/users/<int:id>")
-def patch_users(id):
-    data = request.get_json()
-    user = User.query.filter(User.id == id).first()
-    if not user:
-        make_response(jsonify({"error": "no such user"}), 404)
-    try:
-        for key in data:
-            setattr(user, key, data[key])
-        db.session.add(user)
-        db.session.commit()
-        return make_response(jsonify(user.to_dict()), 201)
-    except:
-        return make_response(jsonify({"error": "could not update user"}), 405)
+#     except Exception as e:
+#         return {"error": f"{e}"}, 404
     
 
-@app.delete("/users/<int:id>")
-def delete_user(id):
-    found_user = User.query.filter(User.id == id).first ()
-    if found_user:
-        db.session.delete(found_user)
-        db.session.commit()
-        return {}, 204
-    else:
-        return{ "message": "Not Found"}, 404
+# @app.patch("/users/<int:id>")
+# def patch_users(id):
+#     data = request.get_json()
+#     user = User.query.filter(User.id == id).first()
+#     if not user:
+#         make_response(jsonify({"error": "no such user"}), 404)
+#     try:
+#         for key in data:
+#             setattr(user, key, data[key])
+#         db.session.add(user)
+#         db.session.commit()
+#         return make_response(jsonify(user.to_dict()), 201)
+#     except:
+#         return make_response(jsonify({"error": "could not update user"}), 405)
+    
+
+# @app.delete("/users/<int:id>")
+# def delete_user(id):
+#     found_user = User.query.filter(User.id == id).first ()
+#     if found_user:
+#         db.session.delete(found_user)
+#         db.session.commit()
+#         return {}, 204
+#     else:
+#         return{ "message": "Not Found"}, 404
     
 # USERS
 
@@ -252,11 +254,11 @@ def create_user():
     try:
         data = request.json
         password_hash =bcrypt.generate_password_hash(data["password"]).decode('utf-8')
-        new_user = User(username=data['username'], password_hash=password_hash)
-        db.session.add(new_user)
+        create_user = User(username=data['username'], password=password_hash)
+        db.session.add(create_user)
         db.session.commit()
-        session["user_id"] = new_user.id
-        return new_user.to_dict(), 201
+        session["user_id"] = create_user.id
+        return create_user.to_dict(), 201
     except Exception as e:
         return { 'error': str(e) }, 406
 
@@ -269,7 +271,7 @@ def create_user():
 def login():
     data = request.json
     user = User.query.filter(User.username==data["username"]).first()
-    if user and bcrypt.check_password_hash(user.password_hash, data["password"]):
+    if user and bcrypt.check_password_hash(user.password, data["password"]):
         session["user_id"] = user.id
         return user.to_dict(), 201
     else:
