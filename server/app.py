@@ -3,14 +3,21 @@
 # Standard library imports
 
 # Remote library imports
-from flask import request, make_response, jsonify
+from flask import request, make_response, jsonify, session
 from flask_restful import Resource
 from sqlalchemy import desc
+from flask_bcrypt import Bcrypt
 
 # Local imports
 from config import app, db, api
 from models import Car, User, FavoriteCar, ShoppingCart, ForSale, CarImage
 
+ 
+
+bcrypt = Bcrypt(app)
+URL_PREFIX = '/api'
+
+app.secret_key = '57d79466ee3cf8a8ba325cf06fdc59b6'
  
 # Views go here!
 
@@ -169,6 +176,120 @@ def delete_user(id):
     else:
         return{ "message": "Not Found"}, 404
     
+# USERS
+
+@app.get('/users')
+def get_all_users():
+    users = User.query.all()
+    users_to_dict = [ u.to_dict() for u in users ]
+    return users_to_dict, 200
+
+
+@app.get('/users/<int:id>')
+def get_user_by_id(id):
+    found_user = User.query.filter(User.id == id).first ()
+    if found_user:
+        return found_user.to_dict(), 200
+    else:
+        return{ "message": "Not Found"}, 404
+    
+
+@app.post("/users")
+def new_user():
+    data = request.json
+    try:
+        password_hash =bcrypt.generate_password_hash(data["password"]).decode('utf-8')
+
+        new_user = User(
+            first_name = data.get("first_name"),
+            last_name = data.get("last_name"),
+            city = data.get("city"),
+            state = data.get("state"),
+            username=data.get("username"),
+            password=password_hash
+        )
+        db.session.add(new_user)
+        db.session.commit()
+
+        return new_user.to_dict(), 201
+    
+    except Exception as e:
+        return {"error": f"{e}"}, 404
+    
+
+@app.patch("/users/<int:id>")
+def patch_users(id):
+    data = request.get_json()
+    user = User.query.filter(User.id == id).first()
+    if not user:
+        make_response(jsonify({"error": "no such user"}), 404)
+    try:
+        for key in data:
+            setattr(user, key, data[key])
+        db.session.add(user)
+        db.session.commit()
+        return make_response(jsonify(user.to_dict()), 201)
+    except:
+        return make_response(jsonify({"error": "could not update user"}), 405)
+    
+
+@app.delete("/users/<int:id>")
+def delete_user(id):
+    found_user = User.query.filter(User.id == id).first ()
+    if found_user:
+        db.session.delete(found_user)
+        db.session.commit()
+        return {}, 204
+    else:
+        return{ "message": "Not Found"}, 404
+
+
+#######################################################################
+    # USER SIGNUP 
+
+@app.post(URL_PREFIX + '/users')
+def create_user():
+    try:
+        data = request.json
+        password_hash =bcrypt.generate_password_hash(data["password"]).decode('utf-8')
+        new_user = User(username=data['username'], password_hash=password_hash)
+        db.session.add(new_user)
+        db.session.commit()
+        session["user_id"] = new_user.id
+        return new_user.to_dict(), 201
+    except Exception as e:
+        return { 'error': str(e) }, 406
+
+
+#####################################################################
+    
+# SESSION LOGIN/LOGOUT#
+
+@app.post(URL_PREFIX + '/login')
+def login():
+    data = request.json
+    user = User.query.filter(User.username==data["username"]).first()
+    if user and bcrypt.check_password_hash(user.password_hash, data["password"]):
+        session["user_id"] = user.id
+        return user.to_dict(), 201
+    else:
+        return{"message": "Invalid Username or password"}, 401
+    
+
+@app.get(URL_PREFIX + "/check_session")
+def check_session():
+    user_id = session.get("user_id")
+    user = User.query.filter(User.id == user_id).first()
+    if user:
+        return user.to_dict(), 200
+    else:
+        return {"message": "No logged in user"}, 401
+    
+# deletes cookie upon logout
+@app.delete(URL_PREFIX + "/logout")
+def logout():
+    session.pop('user_id')
+    return {}, 204
 
 
 
