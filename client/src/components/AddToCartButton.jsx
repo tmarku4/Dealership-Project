@@ -2,21 +2,38 @@ import React, { useState, useEffect } from "react";
 
 function AddToCartButton ({ carID, updateCart }) {
     const [inCart, setInCart] = useState(false)
+    const [currentCart, setCurrentCart] = useState([])
 
     // fetch to see if car is in the cart list 
+    // change route to select the id associated with the users cars in his shopping cart?
+    // change the route to be the instance ID
+
     useEffect(() => {
-        fetch(`/shoppingcarts/${carID}`)
+        fetch(`/shoppingcarts`)
         .then(resp => {
-            if (resp.status === 218) {
-                setInCart(false);
-            } else if (resp.ok) {
-                setInCart(true);
+            if (resp.ok){
+                resp.json().then((returnedData) => {
+                    setCurrentCart(...currentCart,returnedData)
+                })
             }
-            })
-            .catch((error) => {
-                console.error('Error fetching favorite data.', error)
-            })
-        }, [])
+        })
+        .catch((error) => {
+            console.error('Error fetching shopping cart data.', error)
+        })
+    }, [])
+
+    // console.log(currentCart)
+
+    useEffect(() => {
+        // Check if the carID exists in the currentCart
+        const isInCart = currentCart.find(item => item.car_id === carID);
+        if (isInCart) {
+            setInCart(true);
+        } else {
+            setInCart(false);
+        }
+
+    }, [currentCart, carID]);
     
 
     function addToCart(event) {
@@ -46,10 +63,12 @@ function AddToCartButton ({ carID, updateCart }) {
         });
     }
 
-    function removeFromCart(event){
-        const cartIDClicked = event.target.parentNode.id
 
-        fetch(`/shoppingcarts/${cartIDClicked}`, {
+    function removeFromCart(event) {
+        const carIDClicked = event.target.parentNode.id;
+        const cartInstance = currentCart.find(item => item.car_id === parseInt(carIDClicked));
+
+        fetch(`/shoppingcarts/${cartInstance.id}`, {
             method: "DELETE",
             })
             .then(resp => {
@@ -65,13 +84,15 @@ function AddToCartButton ({ carID, updateCart }) {
             });
     }
 
-    function onAddCartButtonClick(carID){
+
+    function onAddCartButtonClick(event){
         if (!inCart) {
-            addToCart(carID)
+            addToCart(event)
         } else {
-            removeFromCart(carID)
+            removeFromCart(event)
         }
     }
+
 
     return (
         <button 

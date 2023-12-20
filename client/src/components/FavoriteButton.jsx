@@ -1,23 +1,33 @@
 import React, { useState, useEffect } from 'react';
 
-function FavoriteButton({ carID, setFavFetchTrigger }){
+function FavoriteButton({ carID, updateFavorites }){
     const [isFavorite, setIsFavorite] = useState(false)
+    const [currentFavorites, setCurrentFavorites] = useState([])
 
     // fetch to see if car is in the favorites list
     useEffect(() => {
-        fetch(`/favoritecars/${carID}`)
+        fetch(`/favoritecars`)
         .then(resp => {
-            if (resp.status === 218) {
-                setIsFavorite(false);
-            } else if (resp.ok) {
-                setIsFavorite(true);
+            if (resp.ok) {
+                resp.json().then((returnedData) => {
+                    setCurrentFavorites(...currentFavorites, returnedData)
+                })
             }
             })
             .catch((error) => {
                 console.error('Error fetching favorite data.', error)
             })
         }, [])
-    
+
+    useEffect(() => {
+        const isInFavorites = currentFavorites.find(item => item.car_id === carID);
+        if (isInFavorites){
+            setIsFavorite(true)
+        } else {
+            setIsFavorite(false)
+        }
+    }, [currentFavorites, carID])
+
 
     function addToFavorites(event) {
         const carIDClicked = event.target.parentNode.id
@@ -36,7 +46,9 @@ function FavoriteButton({ carID, setFavFetchTrigger }){
         .then(resp => {
             if (resp.ok) {
                 setIsFavorite(true)
-                setFavFetchTrigger(true)
+                if (updateFavorites) {
+                    updateFavorites()
+                }
             }
         })
         .catch(error => {
@@ -45,15 +57,18 @@ function FavoriteButton({ carID, setFavFetchTrigger }){
     }
 
     function removeFromFavorites(event){
-        const favoriteIDClicked = event.target.parentNode.id
+        const carIDClicked = event.target.parentNode.id
+        const favoriteInstance = currentFavorites.find(item => item.car_id === parseInt(carIDClicked))
 
-        fetch(`/favoritecars/${favoriteIDClicked}`, {
+        fetch(`/favoritecars/${favoriteInstance.id}`, {
             method: "DELETE",
             })
             .then(resp => {
                 if (resp.ok) {
                 setIsFavorite(false);
-                setFavFetchTrigger(false)
+                if (updateFavorites) {
+                    updateFavorites()
+                }
                 }
             })
             .catch(error => {

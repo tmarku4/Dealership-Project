@@ -1,25 +1,41 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ImageDropzone from "../components/ImageDropzone";
+import { useForm } from 'react-hook-form';
 import "../stylesheets/index.css"
 
 function ListCar(){
     const [ images, setImages ] = useState([])
     const navigate = useNavigate()
 
-    function handleFormSubmit(event){
-        event.preventDefault();
-        
-        const newCarListing = new FormData(event.target)
-        const JSONData = {}
+    const { 
+        register, 
+        handleSubmit, 
+        watch,
+        formState: { errors }
+    } = useForm({
+        defaultValues: {
+            year: undefined,
+            make: "",
+            model: "",
+            body_style: "",
+            body_color: "",
+            price: undefined,
+            total_miles: undefined,
+            engine_horse_power: undefined,
+            engine_torque: undefined
+        }
+    });
 
-        newCarListing.forEach((value, key) => {
-            JSONData[key] = value
-        })
+    console.log(errors);
+    console.log(watch())
 
-        console.log(JSONData)
-        // JSONData['images'] = images
-        JSONData['owner_id'] = 1
+    const onSubmit = (data) => {
+        console.log(data)
+
+        data['images'] = images
+        data['owner_id'] = 1
+        console.log(data)
 
         fetch('/cars', {
         method: "POST",
@@ -27,7 +43,7 @@ function ListCar(){
             "Content-Type": "application/json",
             "Accept": "application/json"
         },
-        body: JSON.stringify(JSONData)
+        body: JSON.stringify(data)
         })
         .then((res) => {
             if (res.ok) {
@@ -48,35 +64,44 @@ function ListCar(){
 
     return (
         <form
-        onSubmit={handleFormSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         id="sell-car-form"
         >
             <input
             type="text"
-            name="year"
+            {...register("year", {required: 'Year is required', maxLength: {
+                value: 4,
+                message: "Year must be four digits long"
+            }})}
             placeholder="Year..."
             // onChange={onFormValueInput}
             />
+            <p>{errors.year?.message}</p>
             <input
             type="text"
-            name="make"
+            {...register("make", {required: 'Make is required'})}
             placeholder="Brand..."
             // onChange={onFormValueInput}
             />
+            <p>{errors.make?.message}</p>
             <input
             type="text"
-            name="model"
+            {...register("model", {required: 'Model is required'})}
             placeholder="Model..."
             // onChange={onFormValueInput}
             />
-            <select name="body_style">
+            <p>{errors.model?.message}</p>
+            <select {...register("body_style", {required: 'Body Style is reuired'})}>
+                <option value="">Body Style</option>
                 <option value="coupe">Coupe</option>
                 <option value="sedan">Sedan</option>
                 <option value="wagon/hatchback">Wagon/Hatchback</option>
                 <option value="suv">SUV</option>
                 <option value="pickup">Pickup</option>
             </select>
-            <select name="body_color">
+            <p>{errors.body_style?.message}</p>
+            <select {...register("body_color", {required: 'Color is required'})}>
+                <option value="">Vehicle Color</option>
                 <option value="black">Black</option>
                 <option value="silver">Silver</option>
                 <option value="white">White</option>
@@ -88,39 +113,44 @@ function ListCar(){
                 <option value="purple">Purple</option>
                 <option value="pink">Pink</option>
             </select>
+            <p>{errors.body_color?.message}</p>
             <input
             type="number"
-            name="price"
+            {...register("price", {required: 'Price is required'})}
             placeholder="List Price..."
             // onChange={onFormValueInput}
             />
+            <p>{errors.price?.message}</p>
             <ImageDropzone 
-            name="img"
+            // {...register("images")}
             className='image-dropzone'
             images={images}
             setImages={setImages}
             />
             <input
             type="number"
-            name="total_miles"
+            {...register("total_miles", {required: 'Total Miles are required'})}
             placeholder="Current Mileage..."
             // onChange={onFormValueInput}
             />
+            <p>{errors.total_miles?.message}</p>
             <span>
                 {' Engine Details: '}
             </span>
             <input
             type="number"
-            name="engine_horse_power"
+            {...register("engine_horse_power")}
             placeholder="Horsepower..."
             // onChange={onFormValueInput}
             />
+            <p>{errors.engine_horse_power?.message}</p>
             <input
             type="number"
-            name="engine_torque"
+            {...register("engine_torque")}
             placeholder="Torque..."
             // onChange={onFormValueInput}
             />
+            <p>{errors.engine_torque?.message}</p>
             <button 
             type="submit"
             >List</button>

@@ -20,6 +20,11 @@ function LoginPage(){
                 name="password"
                 placeholder="Password..."
                 />
+                <button
+                type="submit"
+                >
+                Login
+                </button>
             </form>
             <p>If you don't have a Login, please <Link to="/signup" className="instring-button">Signup</Link></p>
             

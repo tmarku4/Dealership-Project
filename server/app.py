@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 
-# Standard library imports
+# Cloudinary imports
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 # Remote library imports
-from flask import request, make_response, jsonify, session
+from flask import request, make_response, jsonify, session, render_template
 from flask_restful import Resource
 from sqlalchemy import desc
 from flask_bcrypt import Bcrypt
@@ -12,21 +15,15 @@ from flask_bcrypt import Bcrypt
 from config import app, db, api
 from models import Car, User, FavoriteCar, ShoppingCart, ForSale, CarImage
 
- 
-
 bcrypt = Bcrypt(app)
 URL_PREFIX = '/api'
 
 app.secret_key = '57d79466ee3cf8a8ba325cf06fdc59b6'
- 
 # Views go here!
 
 @app.route('/')
 def index():
     return '<h1>Project Server</h1>'
-
-
-
 
 # CARS
 @app.get('/cars')
@@ -55,29 +52,45 @@ def get_newest_cars():
     
 @app.post("/cars")
 def create_car():
-    data = request.json
     try:
-        new_car = Car()
-        for key in data:
-            setattr(Car, key, data[key])
+        data = request.json
+        uploaded_urls = []
+    
+        for pic in range(1,6):
+            file_key = f"file{pic}"
+            if file_key in request.files:
+                file_to_upload = request.files[file_key]
 
-        # new_car = Car(
-        #     year = data.get("year"),
-        #     make = data.get("make"),
-        #     model = data.get("model"),
-        #     body_style = data.get("body_style"),
-        #     body_color = data.get("body_color"),
-        #     total_miles = data.get("total_miles"),
-        #     engine_horse_power = data.get("engine_horse_power"),
-        #     engine_torque = data.get("engine_torque"),
-        #     price = data.get("price"),
-        #     owner_id = data.get("owner_id")
-            
-        # )
+                cloudinary.config(
+                    cloud_name= 'dq0gpy4yy',
+                    api_keys='327993971821764',
+                    api_secret='OrsYVPet6aSUHh-XxRcar6hldMY'
+                )
+                upload_result = cloudinary.uploader.upload(file_to_upload)
+                uploaded_url = upload_result['secure_url']
+
+                uploaded_urls.append[uploaded_url]
+
+        new_car = Car(
+            make = data.get("make"),
+            model = data.get("model"),
+            body_style = data.get("body_style"),
+            body_color = data.get("body_color"),
+            total_miles = data.get("total_miles"),
+            engine_horse_power = data.get("engine_horse_power"),
+            engine_torque = data.get("engine_torque"),
+            price = data.get("price"),
+            owner_id = data.get("owner_id")
+        )
+
+        for url in uploaded_urls:
+            new_car_image = CarImage(image=url, car=new_car)
+            db.session.add(new_car_image)
+
         db.session.add(new_car)
         db.session.commit()
 
-        return new_car.to_dict(), 201
+        return {"car": new_car.to_dict(), "image_urls": uploaded_urls}, 201
     
     except Exception as e:
         return {"error": f"{e}"}, 404
@@ -130,7 +143,7 @@ def get_user_by_id(id):
     
 
 @app.post("/users")
-def create_user():
+def new_user():
     data = request.json
     try:
         new_user = User(
@@ -175,74 +188,6 @@ def delete_user(id):
         return {}, 204
     else:
         return{ "message": "Not Found"}, 404
-    
-# USERS
-
-@app.get('/users')
-def get_all_users():
-    users = User.query.all()
-    users_to_dict = [ u.to_dict() for u in users ]
-    return users_to_dict, 200
-
-
-@app.get('/users/<int:id>')
-def get_user_by_id(id):
-    found_user = User.query.filter(User.id == id).first ()
-    if found_user:
-        return found_user.to_dict(), 200
-    else:
-        return{ "message": "Not Found"}, 404
-    
-
-@app.post("/users")
-def new_user():
-    data = request.json
-    try:
-        password_hash =bcrypt.generate_password_hash(data["password"]).decode('utf-8')
-
-        new_user = User(
-            first_name = data.get("first_name"),
-            last_name = data.get("last_name"),
-            city = data.get("city"),
-            state = data.get("state"),
-            username=data.get("username"),
-            password=password_hash
-        )
-        db.session.add(new_user)
-        db.session.commit()
-
-        return new_user.to_dict(), 201
-    
-    except Exception as e:
-        return {"error": f"{e}"}, 404
-    
-
-@app.patch("/users/<int:id>")
-def patch_users(id):
-    data = request.get_json()
-    user = User.query.filter(User.id == id).first()
-    if not user:
-        make_response(jsonify({"error": "no such user"}), 404)
-    try:
-        for key in data:
-            setattr(user, key, data[key])
-        db.session.add(user)
-        db.session.commit()
-        return make_response(jsonify(user.to_dict()), 201)
-    except:
-        return make_response(jsonify({"error": "could not update user"}), 405)
-    
-
-@app.delete("/users/<int:id>")
-def delete_user(id):
-    found_user = User.query.filter(User.id == id).first ()
-    if found_user:
-        db.session.delete(found_user)
-        db.session.commit()
-        return {}, 204
-    else:
-        return{ "message": "Not Found"}, 404
-
 
 #######################################################################
     # USER SIGNUP 

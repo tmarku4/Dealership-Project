@@ -3,16 +3,14 @@ import CarCard from "../components/CarCard";
 
 function ShoppingCart () {
     const [currentCart, setCurrentCart] = useState([])
-    const [fetchTrigger, setFetchTrigger] = useState(true)
 
     function updateCart(){
-
         fetch('/shoppingcarts')
             .then(res => {
                 if (res.ok) {
                     res.json().then(returnedData => {
                         setCurrentCart(returnedData.map((car) => car.car_obj))
-                        // console.log(carsInCart)
+                        console.log(returnedData)
                     })
                 }
             })
@@ -22,11 +20,8 @@ function ShoppingCart () {
         updateCart()
     }, [])
 
-    // setFetchTrigger(currentCart)
-
     return (
         <CarCard carData={currentCart} updateCart={updateCart}/>
-        // <CarCard carData={currentCart} />
     )
 }
 
