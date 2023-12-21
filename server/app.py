@@ -2,6 +2,15 @@
 
 # Cloudinary imports
 import cloudinary
+
+# CLOUDINARY KEYS
+cloudinary.config(
+    cloud_name='dq0gpy4yy',
+    api_key='327993971821764',
+    api_secret='OrsYVPet6aSUHh-XxRcar6hldMY'
+)
+
+# More cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
@@ -16,18 +25,52 @@ from config import app, db, api
 from models import Car, User, FavoriteCar, ShoppingCart, ForSale, CarImage
 
 app.secret_key = '57d79466ee3cf8a8ba325cf06fdc59b6'
+
+CLOUDINARY_URL="cloudinary://327993971821764:OrsYVPet6aSUHh-XxRcar6hldMY@dq0gpy4yy?upload_prefix=Redline_Dealership"
+
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # app.json.compact = False
 
+# USER ENCRYPTION
 bcrypt = Bcrypt(app)
 URL_PREFIX = '/api'
-# Views go here!
 
+## ROUTES
 @app.route('/')
 def index():
     return '<h1>Project Server</h1>'
 
+##############################################
+# IMAGE UPLOAD ROUTE
+@app.post("/upload")
+def upload():
+    try:
+        uploaded_urls = []
+
+        for file_key in request.files:
+            file_to_upload = request.files[file_key]
+
+            # print(file_to_upload.filename)
+            # print(file_to_upload.content_type)
+
+            upload_result = cloudinary.uploader.upload(file_to_upload)
+            # print(upload_result)
+
+            uploaded_url = upload_result['secure_url']
+            # print(uploaded_url)
+
+            uploaded_urls.append(uploaded_url)
+
+            # print(uploaded_urls)
+
+        return jsonify({"urls": uploaded_urls}), 200
+
+    except Exception as e:
+        print(f"Error occurred: {e}")
+        return jsonify({"error": f"Upload failed: {e}"}), 500
+
+##############################################
 # CARS
 @app.get('/cars')
 def get_all_cars():
@@ -57,22 +100,9 @@ def get_newest_cars():
 def create_car():
     try:
         data = request.json
-        uploaded_urls = []
-    
-        for pic in range(1,6):
-            file_key = f"file{pic}"
-            if file_key in request.files:
-                file_to_upload = request.files[file_key]
+        uploaded_urls = data.get('images', [])
 
-                cloudinary.config(
-                    cloud_name= 'dq0gpy4yy',
-                    api_keys='327993971821764',
-                    api_secret='OrsYVPet6aSUHh-XxRcar6hldMY'
-                )
-                upload_result = cloudinary.uploader.upload(file_to_upload)
-                uploaded_url = upload_result['secure_url']
-
-                uploaded_urls.append[uploaded_url]
+        print(uploaded_urls)
 
         new_car = Car(
             make = data.get("make"),
@@ -86,11 +116,17 @@ def create_car():
             owner_id = data.get("owner_id")
         )
 
-        for url in uploaded_urls:
-            new_car_image = CarImage(image=url, car=new_car)
-            db.session.add(new_car_image)
+        print(new_car.to_dict())
 
         db.session.add(new_car)
+
+        for url in uploaded_urls:
+            new_car_image = CarImage(image=url, car=new_car.id)
+            db.session.add(new_car_image)
+
+        print(new_car_image)
+
+        db.session.add(new_car_image.to_dict())
         db.session.commit()
 
         return {"car": new_car.to_dict(), "image_urls": uploaded_urls}, 201
@@ -122,76 +158,10 @@ def delete_car(id):
         return {}, 204
     else:
         return{ "message": "Not Found"}, 404
-    
 
+##############################################    
 # USERS
     
-
-# @app.get('/users')
-# def get_all_users():
-#     users = User.query.all()
-#     users_to_dict = [ u.to_dict() for u in users ]
-#     return users_to_dict, 200
-
-
-# @app.get('/users/<int:id>')
-# def get_user_by_id(id):
-#     found_user = User.query.filter(User.id == id).first ()
-#     if found_user:
-#         return found_user.to_dict(), 200
-#     else:
-#         return{ "message": "Not Found"}, 404
-    
-
-# @app.post("/users")
-# def create_user():
-#     data = request.json
-#     try:
-#         new_user = User(
-#             first_name = data.get("first_name"),
-#             last_name = data.get("last_name"),
-#             city = data.get("city"),
-#             state = data.get("state"),
-#             username=data.get("username"),
-#             password=data.get("password")
-#         )
-#         db.session.add(new_user)
-#         db.session.commit()
-
-#         return new_user.to_dict(), 201
-    
-#     except Exception as e:
-#         return {"error": f"{e}"}, 404
-    
-
-# @app.patch("/users/<int:id>")
-# def patch_users(id):
-#     data = request.get_json()
-#     user = User.query.filter(User.id == id).first()
-#     if not user:
-#         make_response(jsonify({"error": "no such user"}), 404)
-#     try:
-#         for key in data:
-#             setattr(user, key, data[key])
-#         db.session.add(user)
-#         db.session.commit()
-#         return make_response(jsonify(user.to_dict()), 201)
-#     except:
-#         return make_response(jsonify({"error": "could not update user"}), 405)
-    
-
-# @app.delete("/users/<int:id>")
-# def delete_user(id):
-#     found_user = User.query.filter(User.id == id).first ()
-#     if found_user:
-#         db.session.delete(found_user)
-#         db.session.commit()
-#         return {}, 204
-#     else:
-#         return{ "message": "Not Found"}, 404
-    
-# USERS
-
 @app.get('/users')
 def get_all_users():
     users = User.query.all()
@@ -208,27 +178,27 @@ def get_user_by_id(id):
         return{ "message": "Not Found"}, 404
     
 
-@app.post("/users")
-def new_user():
-    data = request.json
-    try:
-        password_hash =bcrypt.generate_password_hash(data["password"]).decode('utf-8')
+# @app.post("/users")
+# def new_user():
+#     data = request.json
+#     try:
+#         password_hash =bcrypt.generate_password_hash(data["password"]).decode('utf-8')
 
-        new_user = User(
-            first_name = data.get("first_name"),
-            last_name = data.get("last_name"),
-            city = data.get("city"),
-            state = data.get("state"),
-            username=data.get("username"),
-            password=password_hash
-        )
-        db.session.add(new_user)
-        db.session.commit()
+#         new_user = User(
+#             first_name = data.get("first_name"),
+#             last_name = data.get("last_name"),
+#             city = data.get("city"),
+#             state = data.get("state"),
+#             username=data.get("username"),
+#             password=password_hash
+#         )
+#         db.session.add(new_user)
+#         db.session.commit()
 
-        return new_user.to_dict(), 201
+#         return new_user.to_dict(), 201
     
-    except Exception as e:
-        return {"error": f"{e}"}, 404
+#     except Exception as e:
+#         return {"error": f"{e}"}, 404
     
 
 @app.patch("/users/<int:id>")
@@ -266,17 +236,23 @@ def create_user():
     try:
         data = request.json
         password_hash =bcrypt.generate_password_hash(data["password"]).decode('utf-8')
-        create_user = User(username=data['username'], password=password_hash)
+        create_user = User(
+            first_name = data.get("first_name"),
+            last_name = data.get("last_name"),
+            city = data.get("city"),
+            state = data.get("state"),
+            username=data['username'], 
+            password=password_hash)
         db.session.add(create_user)
         db.session.commit()
         session["user_id"] = create_user.id
         return create_user.to_dict(), 201
     except Exception as e:
+        print(f'This Error Occured: {e}')
         return { 'error': str(e) }, 406
 
 
-#####################################################################
-    
+#####################################################################  
 # SESSION LOGIN/LOGOUT#
 
 @app.post(URL_PREFIX + '/login')
@@ -306,16 +282,12 @@ def logout():
     return {}, 204
 
 
-
-
-
 # Favorite Car
 @app.get('/favoritecars')
 def get_all_favorite_cars():
     favoritecars = FavoriteCar.query.all()
     favoritecars_to_dict = [ f.to_dict() for f in favoritecars ]
-    return favoritecars_to_dict, 200
-
+    return favoritecars_to_dict, 200\
 
 @app.get('/favoritecars/<int:id>')
 def get_favoritecar_by_id(id):
@@ -325,8 +297,6 @@ def get_favoritecar_by_id(id):
     else:
         return{ "message": "Not Found"}, 218
     
-
-
 @app.post("/favoritecars")
 def create_favoritecar():
     data = request.json
@@ -343,8 +313,6 @@ def create_favoritecar():
     
     except Exception as e:
         return {"error": f"{e}"}, 404
-    
-
 
 @app.patch("/favoritecars/<int:id>")
 def patch_favoritecars(id):
@@ -371,7 +339,7 @@ def delete_favoritecar(id):
     else:
         return{ "message": "Not Found"}, 404
 
-
+##############################################
 # SHOPPING CART
     
 @app.get('/shoppingcarts')
@@ -379,7 +347,6 @@ def get_all_shopping_carts():
     shoppingcarts = ShoppingCart.query.all()
     shoppingcarts_to_dict = [ s.to_dict() for s in shoppingcarts ]
     return shoppingcarts_to_dict, 200
-
 
 @app.get('/shoppingcarts/<int:id>')
 def get_shoppingcart_by_id(id):
@@ -406,7 +373,6 @@ def create_shoppingcart():
     except Exception as e:
         return {"error": f"{e}"}, 404
 
-
 @app.patch("/shoppingcarts/<int:id>")
 def patch_shoppingcarts(id):
     data = request.get_json()
@@ -422,7 +388,6 @@ def patch_shoppingcarts(id):
     except:
         return make_response(jsonify({"error": "could not update cart"}), 405)
     
-
 @app.delete("/shoppingcarts/<int:id>")
 def delete_shoppingcart(id):
     found_shoppingcart = ShoppingCart.query.filter(ShoppingCart.id == id).first ()
@@ -432,12 +397,8 @@ def delete_shoppingcart(id):
         return {}, 204
     else:
         return{ "message": "Not Found"}, 404
-    
-
 
 ##############################################
-
-
 # FORSALE
     
 @app.get('/forsale')
@@ -511,7 +472,6 @@ def delete_forsale(id):
 
 
 ###################################################
-
 # CARIMAGE
     
 @app.get('/carimage')
@@ -534,15 +494,15 @@ def get_carimage_by_id(id):
 def create_carimage():
     data = request.json
     try:
-        new_carimage = CarImage(
+        new_car_image = CarImage(
             image = data.get("image"),
             car_id = data.get("car_id")
             
         )
-        db.session.add(new_carimage)
+        db.session.add(new_car_image)
         db.session.commit()
 
-        return new_carimage.to_dict(), 201
+        return new_car_image.to_dict(), 201
     
     except Exception as e:
         return {"error": f"{e}"}, 404
@@ -573,78 +533,6 @@ def delete_carimage(id):
         return {}, 204
     else:
         return{ "message": "Not Found"}, 404
-
-
-
-
-
-# Transaction history
-
-# @app.get('/purchasehistory')
-# def get_all_purchase_history():
-#     purchasehistory = PurchaseHistory.query.all()
-#     purchasehistory_to_dict = [ p.to_dict() for p in purchasehistory ]
-#     return purchasehistory_to_dict, 200
-
-# @app.get('/purchasehistory/<int:id>')
-# def get_purchasehistory_by_id(id):
-#     found_purchasehistory = PurchaseHistory.query.filter(PurchaseHistory.id == id).first ()
-#     if found_purchasehistory:
-#         return found_purchasehistory.to_dict(), 200
-#     else:
-#         return{ "message": "Not Found"}, 404
-    
-# @app.post("/purchasehistory")
-# def create_purchasehistory():
-#     data = request.json
-#     try:
-#         new_purchasehistory = PurchaseHistory(
-#             seller = data.get("seller"),
-#             buyer = data.get("buyer"),
-#             item = data.get("item")
-            
-#         )
-#         db.session.add(new_purchasehistory)
-#         db.session.commit()
-
-#         return new_purchasehistory.to_dict(), 201
-    
-#     except Exception as e:
-#         return {"error": f"{e}"}, 404
-    
-# @app.patch("/purchasehistory/<int:id>")
-# def patch_purchasehistory(id):
-#     data = request.get_json()
-#     purchasehistory = PurchaseHistory.query.filter(PurchaseHistory.id == id).first()
-#     if not purchasehistory:
-#         make_response(jsonify({"error": "no such transaction"}), 404)
-#     try:
-#         for key in data:
-#             setattr(purchasehistory, key, data[key])
-#         db.session.add(purchasehistory)
-#         db.session.commit()
-#         return make_response(jsonify(purchasehistory.to_dict()), 201)
-#     except:
-#         return make_response(jsonify({"error": "could not update transaction"}), 405)
-    
-# @app.delete("/purchasehistory/<int:id>")
-# def delete_purchasehistory(id):
-#     found_purchasehistory = PurchaseHistory.query.filter(PurchaseHistory.id == id).first ()
-#     if found_purchasehistory:
-#         db.session.delete(found_purchasehistory)
-#         db.session.commit()
-#         return {}, 204
-#     else:
-#         return{ "message": "Not Found"}, 404
-
-
-
-
-
-
-    
-
-
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
