@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useOutletContext, useNavigate, Link } from "react-router-dom";
 
 function SignUpPage(){
-    const [firstName, setFirstName] = useState('')
-    const [lastName, setLastName] = useState('')
+    const [first_name, setFirst_Name] = useState('')
+    const [last_name, setLast_Name] = useState('')
     const [city, setCity] = useState('')
     const [state, setState] = useState('')
     const [username, setUsername] = useState('')
@@ -13,8 +13,8 @@ function SignUpPage(){
   
     const { currentUser, attemptSignup} = useOutletContext()
 
-    const handleChangeFirstName = e => setFirstName(e.target.value)
-    const handleChangeLastName = e => setLastName(e.target.value)
+    const handleChangeFirstName = e => setFirst_Name(e.target.value)
+    const handleChangeLastName = e => setLast_Name(e.target.value)
     const handleChangeCity = e => setCity(e.target.value)
     const handleChangeState = e => setState(e.target.value)
     const handleChangeUsername = e => setUsername(e.target.value)
@@ -22,8 +22,9 @@ function SignUpPage(){
 
     function handleFormSubmit(event){
         event.preventDefault();
-        attemptSignup({firstName, lastName, city, state, username, password})
-        navigate(`/profile/${currentUser.id}`)
+        attemptSignup({first_name, last_name, city, state, username, password})
+        navigate('/')
+        // navigate(`/profile/${currentUser.id}`)
 
         // const newUser = new FormData(event.target)
         // const JSONData = {}
@@ -67,44 +68,44 @@ function SignUpPage(){
                 <input
                 type="text"
                 name="first_name"
-                // value={firstName}
+                value={first_name}
                 placeholder="First Name..."
-                // onChange={handleChangeFirstName}
+                onChange={handleChangeFirstName}
                 />
                 <input
                 type="text"
                 name="last_name"
-                // value={lastName}
+                value={last_name}
                 placeholder="Last Name..."
-                // onChange={handleChangeLastName}
+                onChange={handleChangeLastName}
                 />
                 <input
                 type="text"
                 name="city"
-                // value={city}
+                value={city}
                 placeholder="City..."
-                // onChange={handleChangeCity}
+                onChange={handleChangeCity}
                 />
                 <input
                 type="text"
                 name="state"
-                // value={state}
+                value={state}
                 placeholder="State..."
-                // onChange={handleChangeState}
+                onChange={handleChangeState}
                 />
                 <input
                 type="text"
                 name="username"
-                // value={username}
+                value={username}
                 placeholder="Username..."
-                // onChange={handleChangeUsername}
+                onChange={handleChangeUsername}
                 />
                 <input
                 type="text"
                 name="password"
-                // value={password}
+                value={password}
                 placeholder="Password..."
-                // onChange={handleChangePassword}
+                onChange={handleChangePassword}
                 />
                 <button 
                 type="submit"

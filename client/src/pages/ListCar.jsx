@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import ImageDropzone from "../components/ImageDropzone";
 import { useForm } from 'react-hook-form';
 import "../stylesheets/index.css"
@@ -7,6 +7,8 @@ import "../stylesheets/index.css"
 function ListCar(){
     const [ images, setImages ] = useState([])
     const navigate = useNavigate()
+
+    const {currentUser} = useOutletContext()
 
     const { 
         register, 
@@ -30,36 +32,66 @@ function ListCar(){
     console.log(errors);
     console.log(watch())
 
-    const onSubmit = (data) => {
-        console.log(data)
+    const onSubmit = async (data) => {
+        data.owner_id = currentUser.id
+        
+        try {
+            const formData = new FormData()
+            images.forEach((image) => {
+                formData.append('images', image)
+            })
 
-        data['images'] = images
-        data['owner_id'] = 1
-        console.log(data)
+            console.log('after "image" append', data)
+            console.log('after "image" append', formData.images)
 
-        fetch('/cars', {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        },
-        body: JSON.stringify(data)
-        })
-        .then((res) => {
-            if (res.ok) {
-            return res.json().then((returnedData) => {
-                console.log(returnedData)
-                navigate(`/vehicle/${returnedData.id}`)
-            });
+            const response = await fetch('/upload', {
+            method: "POST",
+            body: formData
+            })
+
+            if (response.ok) {
+                const responseData = await response.json();
+                const imageUrls = responseData.urls
+                
+                console.log(data)
+                console.log(imageUrls)
+
+                data['images'] = imageUrls
+
+                const carResponse = await fetch('/cars', {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                })
+
+                if (carResponse.ok){
+                    const returnData = await carResponse.json();
+                    imageUrls.forEach((url) => {
+                        fetch('/carimage', {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Accept": "application/json"
+                            },
+                            body: JSON.stringify({
+                                car_id: returnData.id,
+                                image: url
+                            })
+                        })
+                        navigate(`/vehicle/${returnData.id}`)
+                    })
+                } else {
+                    console.error('Failed to add new car')
+                }
             } else {
-            // Handle error
-            console.error("Error:", res.status, res.statusText);
+                console.error('Failed to upload images')
             }
-        })
-        .catch((error) => {
-            console.log(`${error}`);
-        });
-
+        } catch (error) {
+            console.error('Error:', error )
+        }
     }
 
     return (

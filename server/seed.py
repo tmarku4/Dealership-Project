@@ -173,27 +173,27 @@ if __name__ == "__main__":
 
         print("seeded for sale")
 
-        image_list= [
-            "https://www.cnet.com/a/img/resize/7411f2fbb73e8a8f323cdb227ca198d4d3d2a3cf/hub/2021/10/13/b8024a0e-b1a4-400c-96d5-1d68ee22e498/2022-bmw-m5-cs-011.jpg?auto=webp&width=1920",
-            "https://www.carscoops.com/wp-content/uploads/2020/10/bmw-m5-e60.jpg",
-            "https://absautorepair.com/cdn/shop/collections/20190723-_99A2692-Edit-2_1024x1024_2x_95f11bae-4b57-4707-84ca-12914cb713c8_2048x.jpg?v=1659593531",
-            "https://www.motortrend.com/uploads/2023/04/2023-Chevrolet-Corvette-Z06-026.jpg",
-            "https://wearecurated.com/wp-content/uploads/Mercedes-Benz-C63-Black-Series-White-05949.jpg"
-        ]
+        # image_list= [
+        #     "https://www.cnet.com/a/img/resize/7411f2fbb73e8a8f323cdb227ca198d4d3d2a3cf/hub/2021/10/13/b8024a0e-b1a4-400c-96d5-1d68ee22e498/2022-bmw-m5-cs-011.jpg?auto=webp&width=1920",
+        #     "https://www.carscoops.com/wp-content/uploads/2020/10/bmw-m5-e60.jpg",
+        #     "https://absautorepair.com/cdn/shop/collections/20190723-_99A2692-Edit-2_1024x1024_2x_95f11bae-4b57-4707-84ca-12914cb713c8_2048x.jpg?v=1659593531",
+        #     "https://www.motortrend.com/uploads/2023/04/2023-Chevrolet-Corvette-Z06-026.jpg",
+        #     "https://wearecurated.com/wp-content/uploads/Mercedes-Benz-C63-Black-Series-White-05949.jpg"
+        # ]
 
-        car_image_list = []
+        # car_image_list = []
 
-        for _ in range(0,5):
-            i = CarImage(
-                image=choice(image_list),
-                car_id=choice(cars_list).id
-            )
+        # for _ in range(0,5):
+        #     i = CarImage(
+        #         image=choice(image_list),
+        #         car_id=choice(cars_list).id
+        #     )
 
-            car_image_list.append(i)
+        #     car_image_list.append(i)
 
-        db.session.add_all(car_image_list)
-        db.session.commit()
+        # db.session.add_all(car_image_list)
+        # db.session.commit()
 
-        print("seeded images")
+        # print("seeded images")
 
         

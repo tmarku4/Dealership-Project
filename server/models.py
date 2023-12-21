@@ -7,7 +7,7 @@ from config import db
 
 ###### USER ######
 class User(db.Model, SerializerMixin):
-   
+
     __tablename__ = "users_table"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -66,6 +66,7 @@ class Car(db.Model, SerializerMixin):
     engine_torque = db.Column(db.Integer, nullable = False)
     price = db.Column(db.Integer, nullable = False)
     owner_id = db.Column(db.Integer, db.ForeignKey("users_table.id"))
+    
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now(), nullable=True)
 
