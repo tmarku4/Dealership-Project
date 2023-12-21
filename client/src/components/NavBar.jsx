@@ -3,10 +3,6 @@ import { Link } from 'react-router-dom';
 
 function NavBar({ currentUser, logout }) {
 
-    function onSignOutButtonClick(){
-        console.log('Logging out')
-    }
-
     if (!currentUser){
         return (
             <>
@@ -30,7 +26,6 @@ function NavBar({ currentUser, logout }) {
                     <Link to="/myfavorites" className="navigation-buttono">Saved for Later</Link>
                     <Link to="/shoppingcart" className="navigation-button">My Cart</Link>
                     <button onClick={logout} className="navigation-button">Logout</button>
-                    {/* <button>Sign Out</button> */}
                 </div>
             </>
         )
