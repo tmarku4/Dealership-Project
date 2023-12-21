@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "./NavBar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 const POST_HEADERS = {
   'Content-Type': 'application/json',
@@ -12,6 +12,8 @@ const URL = "/api"
 function Home() {
 
   const [currentUser, setCurrentUser] = useState(null)
+
+  const navigate = useNavigate()
 
   // SIGNUP, LOGIN AND LOGOUT FNS //
 
@@ -63,6 +65,7 @@ function Home() {
   function logout() {
     setCurrentUser(null)
     fetch(URL + '/logout', {method: "DELETE"})
+    navigate('/')
   }
 
   // console.log(currentUser)

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useOutletContext } from 'react-router-dom';
 
 function FavoriteButton({ carID, updateFavorites }){
     const [isFavorite, setIsFavorite] = useState(false)
     const [currentFavorites, setCurrentFavorites] = useState([])
+
+    const { currentUser } = useOutletContext()
 
     // fetch to see if car is in the favorites list
     useEffect(() => {
@@ -10,17 +13,29 @@ function FavoriteButton({ carID, updateFavorites }){
         .then(resp => {
             if (resp.ok) {
                 resp.json().then((returnedData) => {
-                    setCurrentFavorites(...currentFavorites, returnedData)
+                    const userFavorites = returnedData.filter((car) => {
+                        if (car.user_id === currentUser.id) {
+                            return car
+                        }
+                    })
+                    setCurrentFavorites(...currentFavorites, userFavorites)
                 })
             }
             })
             .catch((error) => {
                 console.error('Error fetching favorite data.', error)
             })
-        }, [])
+        }, [currentUser])
+
+    console.log(currentFavorites)
 
     useEffect(() => {
-        const isInFavorites = currentFavorites.find(item => item.car_id === carID);
+        const isInFavorites = currentFavorites.find((item) => {
+            if (item.car_id === carID) {
+                return item
+            }
+        });
+
         if (isInFavorites){
             setIsFavorite(true)
         } else {
@@ -39,7 +54,7 @@ function FavoriteButton({ carID, updateFavorites }){
                 "Accept": "application/json"
             },
             body: JSON.stringify({
-                user_id: 1,
+                user_id: currentUser.id,
                 car_id: carIDClicked
             })
         })

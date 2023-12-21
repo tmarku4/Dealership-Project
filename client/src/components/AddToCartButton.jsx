@@ -4,32 +4,38 @@ import { useOutletContext } from "react-router-dom";
 function AddToCartButton ({ carID, updateCart }) {
     const [inCart, setInCart] = useState(false)
     const [currentCart, setCurrentCart] = useState([])
+
     const { currentUser } = useOutletContext()
     console.log(currentUser)
-
-    // fetch to see if car is in the cart list 
-    // change route to select the id associated with the users cars in his shopping cart?
-    // change the route to be the instance ID
 
     useEffect(() => {
         fetch(`/shoppingcarts`)
         .then(resp => {
             if (resp.ok){
                 resp.json().then((returnedData) => {
-                    setCurrentCart(...currentCart,returnedData)
+                    const userCart = returnedData.filter((car) => {
+                        if (car.user_id === currentUser.id) {
+                            return car
+                        }
+                    })
+                    setCurrentCart(...currentCart, userCart)
                 })
             }
         })
         .catch((error) => {
             console.error('Error fetching shopping cart data.', error)
         })
-    }, [])
+    }, [currentUser])
 
     // console.log(currentCart)
 
     useEffect(() => {
         // Check if the carID exists in the currentCart
-        const isInCart = currentCart.find(item => item.car_id === carID);
+        const isInCart = currentCart.find((item) => {
+            if (item.car_id === carID) {
+                return item
+            };
+        })
         if (isInCart) {
             setInCart(true);
         } else {
@@ -50,7 +56,7 @@ function AddToCartButton ({ carID, updateCart }) {
             },
             body: JSON.stringify({
                 // set to currentUser.id when working
-                user_id: 1,
+                user_id: currentUser.id,
                 car_id: carIDClicked
             })
         })

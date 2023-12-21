@@ -99,12 +99,17 @@ def get_newest_cars():
 @app.post("/cars")
 def create_car():
     try:
+        # request data
         data = request.json
-        uploaded_urls = data.get('images', [])
 
-        print(uploaded_urls)
+        # 
+        # uploaded_urls = data.get('images', [])
+
+        print(data)
+        # print(uploaded_urls)
 
         new_car = Car(
+            year = data.get("year"),
             make = data.get("make"),
             model = data.get("model"),
             body_style = data.get("body_style"),
@@ -120,18 +125,19 @@ def create_car():
 
         db.session.add(new_car)
 
-        for url in uploaded_urls:
-            new_car_image = CarImage(image=url, car=new_car.id)
-            db.session.add(new_car_image)
+        # for url in uploaded_urls:
+        #     new_car_image = CarImage(image=url, car=new_car.id)
+        #     db.session.add(new_car_image)
 
-        print(new_car_image)
+        # print(new_car_image)
 
-        db.session.add(new_car_image.to_dict())
+        # db.session.add(new_car_image.to_dict())
         db.session.commit()
 
-        return {"car": new_car.to_dict(), "image_urls": uploaded_urls}, 201
+        return {"car": new_car.to_dict()}, 201
     
     except Exception as e:
+        print(f'{e}')
         return {"error": f"{e}"}, 404
     
 @app.patch("/cars/<int:id>")

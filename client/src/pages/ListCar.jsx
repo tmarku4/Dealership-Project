@@ -53,8 +53,8 @@ function ListCar(){
                 const responseData = await response.json();
                 const imageUrls = responseData.urls
                 
-                console.log(data)
-                console.log(imageUrls)
+                // console.log(data)
+                // console.log(imageUrls)
 
                 data['images'] = imageUrls
 
@@ -69,6 +69,9 @@ function ListCar(){
 
                 if (carResponse.ok){
                     const returnData = await carResponse.json();
+                    // console.log(returnData.car)
+                    // console.log(returnData.car.id)
+                    
                     imageUrls.forEach((url) => {
                         fetch('/carimage', {
                             method: "POST",
@@ -77,11 +80,11 @@ function ListCar(){
                                 "Accept": "application/json"
                             },
                             body: JSON.stringify({
-                                car_id: returnData.id,
+                                car_id: returnData.car.id,
                                 image: url
                             })
                         })
-                        navigate(`/vehicle/${returnData.id}`)
+                        navigate(`/vehicle/${returnData.car.id}`)
                     })
                 } else {
                     console.error('Failed to add new car')

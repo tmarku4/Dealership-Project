@@ -5,13 +5,19 @@ import { useOutletContext } from "react-router-dom";
 function ShoppingCart () {
     const [currentCart, setCurrentCart] = useState([])
 
+    const { currentUser } = useOutletContext()
+
     function updateCart(){
         fetch('/shoppingcarts')
             .then(res => {
                 if (res.ok) {
                     res.json().then(returnedData => {
-                        setCurrentCart(returnedData.map((car) => car.car_obj))
-                        console.log(returnedData)
+                        const userCart = returnedData.filter((car) => {
+                            if (car.user_id === currentUser.id) {
+                                return car
+                            }
+                        })
+                        setCurrentCart(userCart.map((car) => car.car_obj))
                     })
                 }
             })
@@ -19,7 +25,7 @@ function ShoppingCart () {
 
     useEffect(() => {
         updateCart()
-    }, [])
+    }, [currentUser])
 
     return (
         <CarCard carData={currentCart} updateCart={updateCart}/>
