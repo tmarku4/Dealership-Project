@@ -1,13 +1,23 @@
 #!/usr/bin/env python3
+import os
+
+from dotenv import load_dotenv
+load_dotenv()
 
 # Cloudinary imports
 import cloudinary
 
 # CLOUDINARY KEYS
+# cloudinary.config(
+#     cloud_name='dq0gpy4yy',
+#     api_key='327993971821764',
+#     api_secret='OrsYVPet6aSUHh-XxRcar6hldMY'
+# )
+
 cloudinary.config(
-    cloud_name='dq0gpy4yy',
-    api_key='327993971821764',
-    api_secret='OrsYVPet6aSUHh-XxRcar6hldMY'
+    cloud_name=os.environ.get('CLOUD_NAME'),
+    api_key=os.environ.get('API_KEY'),
+    api_secret=os.environ.get('API_SECRET')
 )
 
 # More cloudinary
