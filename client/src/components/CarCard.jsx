@@ -8,6 +8,8 @@ import { useOutletContext } from "react-router-dom";
 function CarCard({ carData, updateCart, updateFavorites}){
     const [carImages, setCarImages] = useState([])
 
+    const { currentUser } = useOutletContext()
+
         useEffect(() => {
             fetch ('/carimage')
             .then(res => {
@@ -41,15 +43,24 @@ function CarCard({ carData, updateCart, updateFavorites}){
                 alt={`${make} ${model}`} 
                 />
                 <p>{`${year} ${make} ${model}`}</p>
-                <FavoriteButton 
-                carID={id}
-                updateFavorites={updateFavorites}
-                />
-                <AddToCartButton 
-                carID={id} 
-                updateCart={updateCart}
-                />
-                <CarDetailsButton />
+
+                    {currentUser ? 
+                    <FavoriteButton 
+                    carID={id}
+                    updateFavorites={updateFavorites}
+                    className="card-button"
+                    /> : null}
+
+                    {currentUser ?
+                    <AddToCartButton 
+                    carID={id} 
+                    updateCart={updateCart}
+                    className="card-button"
+                    /> : null}
+
+                    <CarDetailsButton 
+                    className="card-button"
+                    />
             </div>
         )
     });

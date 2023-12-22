@@ -98,56 +98,92 @@
 /* CarInventory.css */
 
 .car-inventory {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  h2 {
-    text-align: center;
-    color: #333;
-    font-size: 2rem;
-  }
-  
-  .car-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-  }
-  
-  .car-item {
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-  }
-  
-  .car-item:hover {
-    transform: scale(1.1);
-  }
-  
-  .car-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .car-details {
-    padding: 15px;
-  }
-  
-  h3 {
-    margin: 0 0 10px;
-    color: #333;
-    font-size: 1.5rem;
-  }
-  
-  p {
-    margin: 0;
-    color: #777;
-  }
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+  font-size: 2rem;
+}
+
+.car-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.car-item {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.car-item:hover {
+  transform: scale(1.1);
+}
+
+.car-image {
+  width: 75%;
+  height: 250px; /* Adjust the height to make the images bigger */
+  object-fit: cover;
+  border-bottom: 1px solid #ddd;
+}
+
+.car-details {
+  padding: 15px;
+}
+
+h3 {
+  margin: 0 0 10px;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+p {
+  margin: 0;
+  color: #777;
+}
+
+.search-form {
+  margin-bottom: 20px;
+}
+
+.car-listings {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.car-card {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+.car-card img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Adjust the margin between buttons in the button-container */
+.button-container {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 23px; /* Adjust the margin as needed */
+}
+
+/* Apply margin between buttons */
+.button-container button {
+  margin: 0 1px; /* Adjust the margin between buttons */
+}
+
+
+
   
   /* Gradient background for car details */
   .car-details::before {
@@ -319,4 +355,123 @@ p {
 
 #sell-car-form button:hover {
   background-color: #2980b9;
+}
+
+/* Combined HeroSlider.css */
+
+.hero__slider {
+  margin-top: 20px;
+}
+
+.slider__item {
+  position: relative;
+  height: 500px; /* Adjust the height as needed */
+  width: 100%; /* Make sure the width takes up the full container */
+  overflow: hidden; /* Prevent images from getting cut off */
+}
+
+.slider__content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #fff; /* Adjust the text color */
+}
+
+.slider__content h4 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.slider__content h1 {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.reserve__btn {
+  background-color: #fff;
+  color: #000; /* Adjust the text color */
+  padding: 10px 20px;
+  font-size: 16px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+
+.reserve__btn:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+/* Set a fixed size for the images */
+.slider__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Maintain aspect ratio while covering the container */
+}
+
+/* Adjust styles for smaller screens */
+@media (max-width: 768px) {
+  .slider__item {
+    border-radius: 12px; /* Add border-radius for smaller screens */
+  }
+
+  .slider__content {
+    padding: 1rem; /* Add padding for smaller screens */
+  }
+
+  .slider__content h4 {
+    font-size: 16px; /* Adjust font size for smaller screens */
+  }
+
+  .slider__content h1 {
+    font-size: 28px; /* Adjust font size for smaller screens */
+  }
+
+  .reserve__btn {
+    padding: 8px 16px; /* Adjust padding for smaller screens */
+    font-size: 14px; /* Adjust font size for smaller screens */
+  }
+}
+
+/* UserProfile.css */
+.user-profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-image {
+  border-radius: 50%;
+  margin-right: 20px;
+  width: 100px;
+  height: 100px;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.username {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.name {
+  font-size: 1.1rem;
+}
+
+.car-list {
+  width: 100%;
+  max-width: 800px;
 }

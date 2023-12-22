@@ -15,7 +15,7 @@ function Header() {
         <div className="contact-info">
           <div className="contact-item">
             <FaPhone className="contact-icon" />
-            <span>(123) 456-7890</span>
+            <span>(347) 456-7890</span>
           </div>
           <div className="contact-item">
             <FaEnvelope className="contact-icon" />
