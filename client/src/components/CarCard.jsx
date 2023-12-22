@@ -27,7 +27,7 @@ function CarCard({ carData, updateCart, updateFavorites}){
     // console.log(carImages)
     // iterate through prop data to populate list
     const carItems = carData?.map((car) => {
-        const {make, model, year, img, id} = car
+        const {make, model, year, id} = car
 
         const images = carImages
         .filter((img) => (img.car_id === id))
