@@ -6,7 +6,7 @@ function AddToCartButton ({ carID, updateCart }) {
     const [currentCart, setCurrentCart] = useState([])
 
     const { currentUser } = useOutletContext()
-    console.log(currentUser)
+    // console.log(currentUser)
 
     useEffect(() => {
         fetch(`/shoppingcarts`)

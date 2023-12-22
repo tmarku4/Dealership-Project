@@ -27,7 +27,7 @@ function FavoriteButton({ carID, updateFavorites }){
             })
         }, [currentUser])
 
-    console.log(currentFavorites)
+    // console.log(currentFavorites)
 
     useEffect(() => {
         const isInFavorites = currentFavorites.find((item) => {

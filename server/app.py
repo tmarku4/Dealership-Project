@@ -184,29 +184,6 @@ def get_user_by_id(id):
         return{ "message": "Not Found"}, 404
     
 
-# @app.post("/users")
-# def new_user():
-#     data = request.json
-#     try:
-#         password_hash =bcrypt.generate_password_hash(data["password"]).decode('utf-8')
-
-#         new_user = User(
-#             first_name = data.get("first_name"),
-#             last_name = data.get("last_name"),
-#             city = data.get("city"),
-#             state = data.get("state"),
-#             username=data.get("username"),
-#             password=password_hash
-#         )
-#         db.session.add(new_user)
-#         db.session.commit()
-
-#         return new_user.to_dict(), 201
-    
-#     except Exception as e:
-#         return {"error": f"{e}"}, 404
-    
-
 @app.patch("/users/<int:id>")
 def patch_users(id):
     data = request.get_json()
