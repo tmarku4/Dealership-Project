@@ -475,3 +475,128 @@ p {
   width: 100%;
   max-width: 800px;
 }
+
+
+.car-details-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* This ensures the content is centered vertically */
+  text-align: center; /* Center text horizontally */
+}
+
+.car-details {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 100%; /* Take full width of the container */
+  max-width: 400px; /* Set a maximum width if needed */
+}
+
+.detail-item {
+  margin-bottom: 15px;
+}
+
+
+/* Add these styles to your CSS */
+/* Updated styles for better aesthetics */
+
+/* Updated styles for better aesthetics */
+
+.user-form {
+  max-width: 400px;
+  margin: 50px auto; /* Increased margin to lower the form on the page */
+  padding: 20px;
+  background-color: #f9f9f9; /* Lighter background color for a clean look */
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.user-form input {
+  width: 94%;
+  padding: 12px; /* Increased padding for a more comfortable input experience */
+  margin-bottom: 20px; /* Increased margin for better separation */
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.user-form button {
+  width: 100%;
+  padding: 12px; /* Increased padding for better button size */
+  background-color: #e74c3c; /* Red color for the button */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth transition on hover */
+}
+
+.user-form button:hover {
+  background-color: #c0392b; /* Darker red on hover */
+}
+
+.instring-button {
+  color: #e74c3c; /* Red color for the link */
+  text-decoration: none;
+  display: inline-block; /* Ensures proper spacing between text and link */
+  margin-top: 10px; /* Adds space above the link */
+}
+
+.instring-button:hover {
+  text-decoration: underline;
+}
+.instring-button-container {
+  text-align: center; /* Center the text */
+  margin-top: 20px; /* Add space above the link */
+}
+
+.signup-page-container {
+  max-width: 400px;
+  margin: 50px auto; /* Increased margin to lower the form on the page */
+  padding: 20px;
+  background-color: #f9f9f9; /* Lighter background color for a clean look */
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+#user-form input {
+  width: 94%;
+  padding: 12px; /* Increased padding for a more comfortable input experience */
+  margin-bottom: 20px; /* Increased margin for better separation */
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+#user-form button {
+  width: 100%;
+  padding: 12px; /* Increased padding for better button size */
+  background-color: #e74c3c; /* Red color for the button */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth transition on hover */
+}
+
+#user-form button:hover {
+  background-color: #c0392b; /* Darker red on hover */
+}
+
+.instring-button {
+  color: #e74c3c; /* Red color for the link */
+  text-decoration: none;
+  display: inline-block; /* Ensures proper spacing between text and link */
+  margin-top: 10px; /* Adds space above the link */
+  text-align: center;
+}
+
+.instring-button:hover {
+  text-decoration: underline;
+}

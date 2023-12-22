@@ -21,7 +21,7 @@ const HeroSlider = () => {
   };
 
   const images = [
-    "https://bucket.dealervenom.com/2023/08/2023-Toyota-Camry-TRD-Model-Left.jpg?fm=pjpg&ixlib=php-3.3.1",
+    "https://bucket.dealervenom.com/2023/08/2023-Toyota-Camry-TRD-Model",
     "https://www.cnet.com/a/img/resize/449f9e27e7949cce20b641d6a869526221a33f09/hub/2018/07/23/052f8057-176e-411b-aa71-a750825c994e/005-2019-mercedes-amg-c63-coupe.jpg?auto=webp&width=1200",
     "https://upload.wikimedia.org/wikipedia/commons/f/f0/2018_Ford_F-150_XLT_Crew_Cab%2C_front_11.10.19.jpg",
   ];
