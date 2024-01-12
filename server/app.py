@@ -7,12 +7,6 @@ load_dotenv()
 # Cloudinary imports
 import cloudinary
 
-# CLOUDINARY KEYS
-# cloudinary.config(
-#     cloud_name='dq0gpy4yy',
-#     api_key='327993971821764',
-#     api_secret='OrsYVPet6aSUHh-XxRcar6hldMY'
-# )
 
 cloudinary.config(
     cloud_name=os.environ.get('CLOUD_NAME'),
@@ -25,31 +19,33 @@ import cloudinary.uploader
 import cloudinary.api
 
 # Remote library imports
-from flask import request, make_response, jsonify, session, render_template
+from flask import Flask, request, make_response, jsonify, session, render_template
 from flask_restful import Resource
 from sqlalchemy import desc
 from flask_bcrypt import Bcrypt
+from flask_migrate import Migrate
+
 
 # Local imports
 from config import app, db, api
 from models import Car, User, FavoriteCar, ShoppingCart, ForSale, CarImage
 
-app.secret_key = '57d79466ee3cf8a8ba325cf06fdc59b6'
-
 CLOUDINARY_URL="cloudinary://327993971821764:OrsYVPet6aSUHh-XxRcar6hldMY@dq0gpy4yy?upload_prefix=Redline_Dealership"
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# app.json.compact = False
+migrate = Migrate(app, db)
+db.init_app(app)
 
 # USER ENCRYPTION
 bcrypt = Bcrypt(app)
 URL_PREFIX = '/api'
 
-## ROUTES
+
 @app.route('/')
-def index():
-    return '<h1>Project Server</h1>'
+@app.route('/<int:id>')
+def index(id=0):
+    return render_template("index.html")
+
+## ROUTES
 
 ##############################################
 # IMAGE UPLOAD ROUTE
